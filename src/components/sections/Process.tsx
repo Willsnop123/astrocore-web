@@ -67,17 +67,17 @@ export default function Process() {
   useEffect(() => {
     if (!isInView || !timelineRef.current) return;
     if (lineRef.current) {
-      gsap.fromTo(lineRef.current, { scaleY: 0 }, { scaleY: 1, duration: 1.8, ease: 'power2.out', transformOrigin: 'top' });
+      gsap.fromTo(lineRef.current, { scaleY: 0 }, { scaleY: 1, duration: 2.2, ease: 'power2.out', transformOrigin: 'top' });
     }
     const items = timelineRef.current.querySelectorAll('.process-step');
     items.forEach((item, i) => {
       gsap.fromTo(item.querySelector('.planet-wrap'),
         { scale: 0, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 0.7, delay: i * 0.35, ease: 'back.out(1.5)' }
+        { scale: 1, opacity: 1, duration: 1.0, delay: i * 0.50, ease: 'back.out(1.5)' }
       );
       gsap.fromTo(item.querySelector('.step-content'),
-        { x: i % 2 === 0 ? 50 : -50, opacity: 0 },
-        { x: 0, opacity: 1, duration: 0.8, delay: i * 0.35 + 0.2, ease: 'power3.out' }
+        { x: i % 2 === 0 ? 60 : -60, opacity: 0 },
+        { x: 0, opacity: 1, duration: 1.0, delay: i * 0.50 + 0.25, ease: 'power3.out' }
       );
     });
   }, [isInView]);

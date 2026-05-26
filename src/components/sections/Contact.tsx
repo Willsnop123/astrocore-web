@@ -39,12 +39,12 @@ export default function Contact() {
 
     gsap.fromTo(
       fields,
-      { y: 30, opacity: 0 },
+      { y: 40, opacity: 0 },
       {
         y: 0,
         opacity: 1,
-        duration: 0.6,
-        stagger: 0.1,
+        duration: 0.9,
+        stagger: 0.15,
         ease: 'power3.out',
       }
     );
