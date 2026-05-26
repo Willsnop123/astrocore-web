@@ -97,8 +97,8 @@ export default function Hero() {
         {/* Main title */}
         <h1
           ref={titleRef}
-          className="font-display text-5xl sm:text-7xl md:text-8xl lg:text-[7rem] font-bold text-space-text tracking-[0.1em] mb-4"
-          style={{ perspective: '1000px' }}
+          className="font-display font-bold text-space-text mb-4 whitespace-nowrap"
+          style={{ perspective: '1000px', fontSize: 'clamp(2rem, 8.5vw, 7rem)', letterSpacing: 'clamp(0.04em, 0.5vw, 0.1em)' }}
         >
           {titleLetters.map((letter, i) => (
             <span key={i} className="letter inline-block" style={{ transformStyle: 'preserve-3d' }}>

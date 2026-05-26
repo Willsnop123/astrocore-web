@@ -102,37 +102,36 @@ export default function Process() {
           </div>
 
           <div ref={timelineRef} className="relative">
-            {/* Vertical orbit path */}
+            {/* Vertical orbit path — desktop only */}
             <div
               ref={lineRef}
-              className="absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2"
+              className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2"
               style={{
                 background: 'linear-gradient(to bottom, rgba(108,99,255,0.6) 0%, rgba(74,144,255,0.4) 50%, transparent 100%)',
                 transformOrigin: 'top',
               }}
             />
 
-            <div className="space-y-20">
+            <div className="space-y-10 md:space-y-20">
               {steps.map((step, index) => (
                 <div
                   key={step.number}
-                  className={`process-step relative flex items-center gap-0 ${
-                    index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'
-                  }`}
+                  className={`process-step relative flex items-center gap-0
+                    flex-col md:flex-row md:items-center
+                    ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
                 >
-                  {/* Planet centered on the line */}
-                  <div className="planet-wrap absolute left-1/2 -translate-x-1/2 z-10 opacity-0">
+                  {/* Planet — static on mobile, absolute on desktop */}
+                  <div className="planet-wrap md:absolute md:left-1/2 md:-translate-x-1/2 z-10 opacity-0 mb-2 md:mb-0">
                     <Planet color={step.color} moonDur={step.moonDur} icon={step.icon} />
                   </div>
 
-                  {/* Content card — alternating sides */}
+                  {/* Content card */}
                   <div
-                    className={`step-content opacity-0 w-5/12 ${
-                      index % 2 === 0 ? 'pr-24 text-right' : 'pl-24 ml-auto text-left'
-                    }`}
+                    className={`step-content opacity-0 w-full md:w-5/12 text-center
+                      ${index % 2 === 0 ? 'md:pr-24 md:text-right' : 'md:pl-24 md:ml-auto md:text-left'}`}
                   >
-                    <div className="glass rounded-2xl p-6 border border-white/5 hover:border-white/10 transition-colors duration-300">
-                      <div className={`flex items-center gap-2 mb-3 ${index % 2 === 0 ? 'justify-end' : 'justify-start'}`}>
+                    <div className="glass rounded-2xl p-5 md:p-6 border border-white/5 hover:border-white/10 transition-colors duration-300">
+                      <div className={`flex items-center gap-2 mb-3 justify-center ${index % 2 === 0 ? 'md:justify-end' : 'md:justify-start'}`}>
                         <span className="text-xs tracking-[0.2em] font-mono" style={{ color: step.color }}>
                           {step.number}
                         </span>
@@ -144,8 +143,8 @@ export default function Process() {
                     </div>
                   </div>
 
-                  {/* Spacer for the other side */}
-                  <div className="w-5/12" />
+                  {/* Spacer — desktop only */}
+                  <div className="hidden md:block w-5/12" />
                 </div>
               ))}
             </div>
