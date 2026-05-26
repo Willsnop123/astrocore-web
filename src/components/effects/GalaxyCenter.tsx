@@ -276,7 +276,7 @@ function GalaxyMesh() {
     mat.uniforms.u_time.value = t;
     mat.uniforms.u_mouse.value.copy(mouseSoft.current);
 
-    points.rotation.x = -0.30;
+    points.rotation.x = -0.18;
     points.rotation.y = t * 0.008;
   });
 
@@ -297,7 +297,7 @@ export default function GalaxyCenter() {
   return (
     <div className="absolute inset-0 z-0 pointer-events-none">
       <Canvas
-        camera={{ position: [0, 7.5, 7.5], fov: 58 }}
+        camera={{ position: [0, 5.0, 9.5], fov: 62 }}
         dpr={[1, 1.2]}
         gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
       >
