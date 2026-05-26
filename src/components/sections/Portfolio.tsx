@@ -84,12 +84,12 @@ function SpaceMonitor({ imgSrc }: { imgSrc: string }) {
         </div>
 
         {/* Screen */}
-        <div className="relative overflow-hidden" style={{ height: 295, background: '#020210' }}>
+        <div className="relative overflow-hidden" style={{ height: 281, background: '#020210' }}>
           <img
             key={imgSrc}
             src={imgSrc}
             alt="portfolio preview"
-            className="w-full h-full object-contain object-top"
+            className="w-full h-full object-cover object-top"
             style={{ animation: 'fadeInDevice 0.7s ease forwards' }}
           />
           {/* Subtle scanlines */}
