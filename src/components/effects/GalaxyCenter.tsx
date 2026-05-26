@@ -23,13 +23,13 @@ const vert = /* glsl */ `
       sin(angle) * aRadius
     );
 
-    // Mouse repulsion — flying-through sensation near center
-    vec2 mw  = u_mouse * 4.0;
+    // Mouse parallax — subtle per-star shimmer on hover
+    vec2 mw  = u_mouse * 3.5;
     vec2 dv  = pos.xz - mw;
     float ld = max(length(dv), 0.01);
-    float inf = exp(-ld * ld * 0.38) * 0.55;
+    float inf = exp(-ld * ld * 0.45) * 0.28;
     pos.xz += (dv / ld) * inf;
-    pos.y  += inf * 0.20;
+    pos.y  += inf * 0.10;
 
     vColor = color;
 
@@ -276,8 +276,8 @@ function GalaxyMesh() {
     mat.uniforms.u_time.value = t;
     mat.uniforms.u_mouse.value.copy(mouseSoft.current);
 
-    points.rotation.x = -0.40 + mouseSoft.current.y * 0.20;
-    points.rotation.y = t * 0.018 + mouseSoft.current.x * 0.12;
+    points.rotation.x = -0.30;
+    points.rotation.y = t * 0.008;
   });
 
   return <primitive object={points} ref={ptRef} />;
@@ -297,7 +297,7 @@ export default function GalaxyCenter() {
   return (
     <div className="absolute inset-0 z-0 pointer-events-none">
       <Canvas
-        camera={{ position: [0, 3.2, 8.0], fov: 68 }}
+        camera={{ position: [0, 7.5, 7.5], fov: 58 }}
         dpr={[1, 1.2]}
         gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
       >
