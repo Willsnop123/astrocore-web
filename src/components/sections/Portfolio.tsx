@@ -1,75 +1,228 @@
 import { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
-import gsap from 'gsap';
+import { ExternalLink } from 'lucide-react';
 import { useInView } from '@/hooks/useInView';
 import TypewriterText from '@/components/effects/TypewriterText';
 
 const projects = [
-  { title: 'Nebula Store',   tag: 'E-commerce',   description: 'Plataforma de venta online con catálogo de 500+ productos', image: '/portfolio/portfolio-1.jpg' },
-  { title: 'Cosmo Tech',     tag: 'Sitio Web',     description: 'Presencia digital para empresa de soluciones cloud',        image: '/portfolio/portfolio-2.jpg' },
-  { title: 'Lunar Clinic',   tag: 'Landing Page',  description: 'Página de conversión para clínica estética',               image: '/portfolio/portfolio-3.jpg' },
-  { title: 'Galaxy Fitness', tag: 'Landing Page',  description: 'Diseño de alta conversión para cadena de gimnasios',       image: '/portfolio/portfolio-4.jpg' },
-  { title: 'Starlight Cafe', tag: 'Sitio Web',     description: 'Experiencia digital inmersiva para restaurante temático',  image: '/portfolio/portfolio-5.jpg' },
-  { title: 'Orbita Shop',    tag: 'E-commerce',    description: 'Tienda online con integración de pagos internacional',     image: '/portfolio/portfolio-6.jpg' },
+  {
+    title: 'Nebula Store',
+    tag: 'E-commerce',
+    description: 'Plataforma de venta online con catálogo de 500+ productos y pagos integrados.',
+    url: '#',
+    image: '/portfolio/portfolio-1.jpg',
+  },
+  {
+    title: 'Cosmo Tech',
+    tag: 'Sitio Web',
+    description: 'Presencia digital para empresa de soluciones cloud con dashboard interactivo.',
+    url: '#',
+    image: '/portfolio/portfolio-2.jpg',
+  },
+  {
+    title: 'Lunar Clinic',
+    tag: 'Landing Page',
+    description: 'Página de conversión de alto rendimiento para clínica estética premium.',
+    url: '#',
+    image: '/portfolio/portfolio-3.jpg',
+  },
+  {
+    title: 'Galaxy Fitness',
+    tag: 'Landing Page',
+    description: 'Diseño de alta conversión para cadena de gimnasios con integración de turnos.',
+    url: '#',
+    image: '/portfolio/portfolio-4.jpg',
+  },
 ];
 
 const TAG_COLORS: Record<string, string> = {
-  'E-commerce':  '#38E8B0',
-  'Sitio Web':   '#6C63FF',
-  'Landing Page':'#4A90FF',
+  'E-commerce': '#38E8B0',
+  'Sitio Web': '#6C63FF',
+  'Landing Page': '#4A90FF',
 };
 
-function getRelIdx(i: number, active: number, total: number) {
-  let d = i - active;
-  if (d >  total / 2) d -= total;
-  if (d < -total / 2) d += total;
-  return d;
+function Corner({ pos }: { pos: 'tl' | 'tr' | 'bl' | 'br' }) {
+  const t = pos[0] === 't';
+  const l = pos[1] === 'l';
+  return (
+    <div
+      className="absolute pointer-events-none"
+      style={{
+        width: 14, height: 14,
+        top: t ? 0 : 'auto', bottom: t ? 'auto' : 0,
+        left: l ? 0 : 'auto', right: l ? 'auto' : 0,
+        borderTop: t ? '2px solid rgba(108,99,255,0.9)' : 'none',
+        borderBottom: t ? 'none' : '2px solid rgba(108,99,255,0.9)',
+        borderLeft: l ? '2px solid rgba(108,99,255,0.9)' : 'none',
+        borderRight: l ? 'none' : '2px solid rgba(108,99,255,0.9)',
+      }}
+    />
+  );
 }
 
-interface CardStyle { transform: string; opacity: number; zIndex: number; filter: string }
-function cardStyle(rel: number): CardStyle {
-  const map: Record<number, CardStyle> = {
-     0: { transform: 'translateX(0%)    scale(1)    rotateY(0deg)',   opacity: 1,    zIndex: 10, filter: 'brightness(1)' },
-     1: { transform: 'translateX(62%)   scale(0.80) rotateY(-22deg)', opacity: 0.65, zIndex: 6,  filter: 'brightness(0.7)' },
-    '-1': { transform: 'translateX(-62%)  scale(0.80) rotateY(22deg)',  opacity: 0.65, zIndex: 6,  filter: 'brightness(0.7)' },
-     2: { transform: 'translateX(105%)  scale(0.62) rotateY(-38deg)', opacity: 0.30, zIndex: 3,  filter: 'brightness(0.5)' },
-    '-2': { transform: 'translateX(-105%) scale(0.62) rotateY(38deg)',  opacity: 0.30, zIndex: 3,  filter: 'brightness(0.5)' },
-  };
-  return map[rel] ?? { transform: 'translateX(0%)', opacity: 0, zIndex: 0, filter: 'brightness(0)' };
+function SpaceMonitor({ imgSrc }: { imgSrc: string }) {
+  return (
+    <div className="relative flex flex-col items-center select-none flex-shrink-0">
+      {/* Monitor frame */}
+      <div
+        className="relative rounded-xl"
+        style={{
+          width: 500,
+          background: 'linear-gradient(145deg, #0c0c22, #07070f)',
+          border: '1.5px solid rgba(108,99,255,0.28)',
+          boxShadow: '0 0 40px rgba(108,99,255,0.10), 0 0 80px rgba(74,144,255,0.05), inset 0 1px 0 rgba(255,255,255,0.04)',
+        }}
+      >
+        {/* Top HUD bar */}
+        <div
+          className="flex items-center justify-between px-4 py-2 rounded-t-xl"
+          style={{ borderBottom: '1px solid rgba(108,99,255,0.14)' }}
+        >
+          <div className="flex items-center gap-2">
+            <span className="block w-2 h-2 rounded-full" style={{ background: '#6C63FF', boxShadow: '0 0 6px #6C63FF' }} />
+            <span className="font-mono text-[8px] tracking-[0.22em] opacity-50" style={{ color: '#a0a8ff' }}>RENDER.DISPLAY</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-[8px] tracking-widest opacity-30" style={{ color: '#a0a8ff' }}>1920×1080</span>
+            <span className="block w-6 h-px opacity-20" style={{ background: '#6C63FF' }} />
+          </div>
+        </div>
+
+        {/* Screen */}
+        <div className="relative overflow-hidden" style={{ height: 295, background: '#020210' }}>
+          <img
+            key={imgSrc}
+            src={imgSrc}
+            alt="portfolio preview"
+            className="w-full h-full object-cover object-top"
+            style={{ animation: 'fadeInDevice 0.7s ease forwards' }}
+          />
+          {/* Subtle scanlines */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: 'repeating-linear-gradient(180deg, transparent 0px, transparent 3px, rgba(0,0,0,0.022) 3px, rgba(0,0,0,0.022) 4px)',
+            }}
+          />
+          {/* Edge vignette */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: 'radial-gradient(ellipse 90% 80% at 50% 50%, transparent 45%, rgba(4,4,20,0.5) 100%)' }}
+          />
+        </div>
+
+        {/* Bottom HUD bar */}
+        <div
+          className="flex items-center justify-between px-4 py-2 rounded-b-xl"
+          style={{ borderTop: '1px solid rgba(108,99,255,0.10)' }}
+        >
+          <span className="font-mono text-[7px] tracking-widest opacity-25" style={{ color: '#a0a8ff' }}>ASTROCORE.SYS</span>
+          <div className="flex items-center gap-1.5">
+            {[0, 1, 2, 3].map(i => (
+              <span key={i} className="block rounded-full" style={{ width: 3, height: 3, background: i < 2 ? '#6C63FF' : 'rgba(108,99,255,0.22)', boxShadow: i < 2 ? '0 0 4px #6C63FF' : 'none' }} />
+            ))}
+          </div>
+          <span className="font-mono text-[7px] tracking-widest opacity-25" style={{ color: '#4A90FF' }}>SIGNAL OK</span>
+        </div>
+
+        <Corner pos="tl" /><Corner pos="tr" /><Corner pos="bl" /><Corner pos="br" />
+      </div>
+
+      {/* Stand neck */}
+      <div style={{ width: 68, height: 16, background: 'linear-gradient(to bottom, rgba(108,99,255,0.14), rgba(74,144,255,0.06))', borderLeft: '1px solid rgba(108,99,255,0.16)', borderRight: '1px solid rgba(108,99,255,0.16)' }} />
+      {/* Stand base */}
+      <div style={{ width: 140, height: 4, borderRadius: 4, background: 'linear-gradient(to right, transparent, rgba(108,99,255,0.35), rgba(74,144,255,0.25), transparent)', boxShadow: '0 0 18px rgba(108,99,255,0.28)' }} />
+    </div>
+  );
+}
+
+function SpacePhone({ imgSrc }: { imgSrc: string }) {
+  return (
+    <div
+      className="relative flex-shrink-0"
+      style={{ width: 136, height: 272 }}
+    >
+      {/* Outer frame */}
+      <div
+        className="absolute inset-0 rounded-[28px] overflow-hidden"
+        style={{
+          background: 'linear-gradient(160deg, #0e0e26, #07070f)',
+          border: '1.5px solid rgba(108,99,255,0.30)',
+          boxShadow: '0 0 28px rgba(108,99,255,0.15), 0 0 55px rgba(74,144,255,0.06), inset 0 1px 0 rgba(255,255,255,0.04)',
+        }}
+      >
+        {/* Camera notch */}
+        <div className="flex items-center justify-center py-2.5" style={{ borderBottom: '1px solid rgba(108,99,255,0.10)' }}>
+          <span className="block w-2 h-2 rounded-full" style={{ background: '#050514', border: '1px solid rgba(108,99,255,0.5)', boxShadow: '0 0 5px rgba(108,99,255,0.4)' }} />
+        </div>
+
+        {/* Screen */}
+        <div className="relative overflow-hidden" style={{ height: 210, background: '#020210' }}>
+          <img
+            key={imgSrc}
+            src={imgSrc}
+            alt="portfolio mobile"
+            className="w-full h-full object-cover object-top"
+            style={{ animation: 'fadeInDevice 0.7s ease forwards' }}
+          />
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: 'repeating-linear-gradient(180deg, transparent 0px, transparent 3px, rgba(0,0,0,0.03) 3px, rgba(0,0,0,0.03) 4px)' }}
+          />
+        </div>
+
+        {/* Bottom bar */}
+        <div className="flex items-center justify-center flex-1 py-3">
+          <span className="block w-10 h-1 rounded-full" style={{ background: 'rgba(108,99,255,0.45)', boxShadow: '0 0 8px rgba(108,99,255,0.35)' }} />
+        </div>
+      </div>
+
+      {/* Side power button */}
+      <div
+        className="absolute rounded-l"
+        style={{ right: -2, top: 68, width: 3, height: 32, background: 'rgba(108,99,255,0.45)', boxShadow: '-2px 0 8px rgba(108,99,255,0.3)', borderRadius: '2px 0 0 2px' }}
+      />
+      {/* Volume buttons */}
+      <div
+        className="absolute"
+        style={{ left: -2, top: 58, width: 3, height: 22, background: 'rgba(108,99,255,0.30)', borderRadius: '0 2px 2px 0' }}
+      />
+      <div
+        className="absolute"
+        style={{ left: -2, top: 86, width: 3, height: 22, background: 'rgba(108,99,255,0.30)', borderRadius: '0 2px 2px 0' }}
+      />
+    </div>
+  );
 }
 
 export default function Portfolio() {
   const { ref: sectionRef, isInView } = useInView({ threshold: 0.1 });
   const [active, setActive] = useState(0);
-  const [hovered, setHovered] = useState<number | null>(null);
   const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const n = projects.length;
 
-  const go = (dir: 1 | -1) => {
-    setActive(a => (a + dir + n) % n);
-    // Reset auto-advance
+  const resetAuto = () => {
     if (autoRef.current) clearInterval(autoRef.current);
-    autoRef.current = setInterval(() => setActive(a => (a + 1) % n), 5000);
+    autoRef.current = setInterval(() => setActive(a => (a + 1) % n), 4500);
   };
 
   useEffect(() => {
     if (!isInView) return;
-    autoRef.current = setInterval(() => setActive(a => (a + 1) % n), 5000);
+    resetAuto();
     return () => { if (autoRef.current) clearInterval(autoRef.current); };
-  }, [isInView, n]);
-
-  // Entry animation
-  const wrapRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (!isInView || !wrapRef.current) return;
-    gsap.fromTo(wrapRef.current, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' });
   }, [isInView]);
 
+  const proj = projects[active];
+
   return (
-    <section id="portfolio" ref={sectionRef} className="relative min-h-[80vh] py-32 px-6 overflow-hidden">
+    <section id="portfolio" ref={sectionRef} className="relative py-32 px-6 overflow-hidden">
+      <style>{`
+        @keyframes fadeInDevice { from { opacity: 0; } to { opacity: 1; } }
+      `}</style>
+
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-20">
-          <h2 className="text-4xl md:text-6xl font-bold font-display tracking-wider text-space-text mb-6">
+        {/* Title */}
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-6xl font-bold font-display tracking-wider text-space-text mb-4">
             <TypewriterText text="TRABAJOS RECIENTES" isInView={isInView} speed={45} />
           </h2>
           <p className={`text-space-text-secondary transition-all duration-700 delay-300 ${isInView ? 'opacity-100' : 'opacity-0'}`}>
@@ -77,118 +230,59 @@ export default function Portfolio() {
           </p>
         </div>
 
-        {/* 3D Carousel */}
-        <div ref={wrapRef} className="opacity-0">
-          <div className="relative h-[420px] flex items-center justify-center" style={{ perspective: '1200px' }}>
-            {projects.map((proj, i) => {
-              const rel = getRelIdx(i, active, n);
-              if (Math.abs(rel) > 2) return null;
-              const s = cardStyle(rel);
-              const isActive = rel === 0;
-              const isHov = hovered === i && isActive;
+        {/* Mockup display */}
+        <div className={`transition-all duration-1000 delay-300 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
 
-              return (
-                <div
-                  key={proj.title}
-                  onClick={() => !isActive && go(rel > 0 ? 1 : -1)}
-                  onMouseEnter={() => isActive && setHovered(i)}
-                  onMouseLeave={() => setHovered(null)}
-                  className="absolute w-80 cursor-pointer"
-                  style={{
-                    transform: s.transform,
-                    opacity: s.opacity,
-                    zIndex: s.zIndex,
-                    filter: s.filter,
-                    transition: 'all 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-                  }}
-                >
-                  <div
-                    className="relative rounded-2xl overflow-hidden border border-white/10 transition-all duration-300"
-                    style={{
-                      boxShadow: isActive
-                        ? '0 0 40px rgba(108,99,255,0.25), 0 20px 60px rgba(0,0,0,0.5)'
-                        : '0 10px 30px rgba(0,0,0,0.4)',
-                      borderColor: isActive ? 'rgba(108,99,255,0.4)' : 'rgba(255,255,255,0.05)',
-                    }}
-                  >
-                    {/* Image */}
-                    <div className="aspect-[4/3] overflow-hidden">
-                      <img
-                        src={proj.image} alt={proj.title} loading="lazy"
-                        className="w-full h-full object-cover transition-transform duration-700"
-                        style={{ transform: isHov ? 'scale(1.08)' : 'scale(1)' }}
-                      />
-                    </div>
-
-                    {/* Overlay */}
-                    <div
-                      className="absolute inset-0 transition-all duration-400"
-                      style={{ background: isHov ? 'rgba(5,5,8,0.2)' : 'rgba(5,5,8,0.55)' }}
-                    />
-
-                    {/* Content */}
-                    <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                      <span
-                        className="self-start px-3 py-1 mb-3 text-xs font-semibold rounded-full"
-                        style={{
-                          background: `${TAG_COLORS[proj.tag]}20`,
-                          border: `1px solid ${TAG_COLORS[proj.tag]}50`,
-                          color: TAG_COLORS[proj.tag],
-                        }}
-                      >
-                        {proj.tag}
-                      </span>
-                      <h3 className="text-xl font-bold text-space-text mb-1">{proj.title}</h3>
-                      <p
-                        className="text-sm text-space-text-secondary transition-all duration-300"
-                        style={{ opacity: isHov ? 1 : 0.6, transform: isHov ? 'translateY(0)' : 'translateY(4px)' }}
-                      >
-                        {proj.description}
-                      </p>
-                      {isActive && (
-                        <button className="mt-4 self-start flex items-center gap-2 text-xs text-space-accent hover:gap-3 transition-all duration-200">
-                          <ExternalLink className="w-3.5 h-3.5" />
-                          Ver proyecto
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+          {/* Devices row */}
+          <div className="flex items-end justify-center">
+            {/* Monitor — hidden on mobile */}
+            <div className="hidden md:block">
+              <SpaceMonitor imgSrc={proj.image} />
+            </div>
+            {/* Phone — overlaps monitor on desktop, centered on mobile */}
+            <div className="relative md:-ml-10 z-10" style={{ marginBottom: 20 }}>
+              <SpacePhone imgSrc={proj.image} />
+            </div>
           </div>
 
-          {/* Controls */}
-          <div className="flex items-center justify-center gap-8 mt-10">
-            <button
-              onClick={() => go(-1)}
-              className="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center text-space-text-secondary hover:border-space-accent hover:text-space-accent transition-all duration-200"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-
-            {/* Dots */}
-            <div className="flex items-center gap-2.5">
-              {projects.map((_, i) => (
-                <button
-                  key={i} onClick={() => setActive(i)}
-                  className="rounded-full transition-all duration-300"
-                  style={{
-                    width: i === active ? 24 : 8,
-                    height: 8,
-                    background: i === active ? '#6C63FF' : 'rgba(255,255,255,0.2)',
-                    boxShadow: i === active ? '0 0 10px rgba(108,99,255,0.6)' : 'none',
-                  }}
-                />
-              ))}
+          {/* Project info */}
+          <div className="text-center mt-10">
+            <div className="flex items-center justify-center gap-3 mb-2">
+              <span
+                className="px-3 py-1 text-xs font-semibold rounded-full"
+                style={{
+                  background: `${TAG_COLORS[proj.tag]}18`,
+                  border: `1px solid ${TAG_COLORS[proj.tag]}50`,
+                  color: TAG_COLORS[proj.tag],
+                }}
+              >
+                {proj.tag}
+              </span>
+              <h3 className="text-xl font-bold text-space-text font-display tracking-wide">{proj.title}</h3>
+              {proj.url !== '#' && (
+                <a href={proj.url} target="_blank" rel="noopener noreferrer" className="text-space-accent hover:opacity-70 transition-opacity">
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              )}
             </div>
+            <p className="text-space-text-secondary text-sm max-w-sm mx-auto">{proj.description}</p>
+          </div>
 
-            <button
-              onClick={() => go(1)}
-              className="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center text-space-text-secondary hover:border-space-accent hover:text-space-accent transition-all duration-200"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
+          {/* Navigation dots */}
+          <div className="flex items-center justify-center gap-3 mt-8">
+            {projects.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => { setActive(i); resetAuto(); }}
+                className="rounded-full transition-all duration-300"
+                style={{
+                  width: i === active ? 28 : 8,
+                  height: 8,
+                  background: i === active ? '#6C63FF' : 'rgba(255,255,255,0.18)',
+                  boxShadow: i === active ? '0 0 12px rgba(108,99,255,0.6)' : 'none',
+                }}
+              />
+            ))}
           </div>
         </div>
       </div>
