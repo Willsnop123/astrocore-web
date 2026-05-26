@@ -5,28 +5,28 @@ import TypewriterText from '@/components/effects/TypewriterText';
 
 const projects = [
   {
-    title: 'Proyecto 1',
+    title: 'Konig',
     tag: 'Sitio Web',
-    description: 'Descripción del proyecto 1.',
+    description: 'Identidad digital para cervecería artesanal. Diseño inmersivo que transmite la esencia de cada estilo.',
     url: '#',
-    desktopImg: '/portfolio/escritorio1.png',
-    mobileImg:  '/portfolio/movil1.jpeg',
+    desktopImg: '/portfolio/escritorio1.webp',
+    mobileImg:  '/portfolio/movil1.webp',
   },
   {
-    title: 'Proyecto 2',
+    title: 'Martín González Cueros',
     tag: 'Sitio Web',
-    description: 'Descripción del proyecto 2.',
+    description: 'Presencia online para marroquinería artesanal. Catálogo elegante con foco en la calidad del producto.',
     url: '#',
-    desktopImg: '/portfolio/escritorio2.png',
-    mobileImg:  '/portfolio/movil2.jpeg',
+    desktopImg: '/portfolio/escritorio2.webp',
+    mobileImg:  '/portfolio/movil2.webp',
   },
   {
-    title: 'WB Service',
+    title: 'WB Service Informática',
     tag: 'Sitio Web',
-    description: 'Descripción del proyecto 3.',
+    description: 'Sitio institucional para servicio técnico. Claro, rápido y optimizado para captar clientes locales.',
     url: '#',
-    desktopImg: '/portfolio/escritorio3.png',
-    mobileImg:  '/portfolio/movil3.jpeg',
+    desktopImg: '/portfolio/escritorio3.webp',
+    mobileImg:  '/portfolio/movil3.webp',
   },
 ];
 
