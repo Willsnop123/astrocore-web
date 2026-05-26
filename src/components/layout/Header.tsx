@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, Rocket } from 'lucide-react';
 import Magnetic from '@/components/effects/Magnetic';
+import AstroCoreIcon from '@/components/effects/AstroCoreIcon';
 
 const navLinks = [
   { label: 'Servicios', href: '#servicios' },
@@ -46,7 +47,7 @@ export default function Header() {
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               className="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
             >
-              <img src="/logo-icon.png" alt="AstroCore" className="h-12 w-12 object-contain mix-blend-screen" />
+              <AstroCoreIcon size={42} />
               <span className="font-display text-xl font-bold text-space-text tracking-wider">ASTROCORE</span>
             </button>
 

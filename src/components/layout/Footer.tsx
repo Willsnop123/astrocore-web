@@ -1,4 +1,5 @@
 import { Instagram, Heart, Facebook } from 'lucide-react';
+import AstroCoreIcon from '@/components/effects/AstroCoreIcon';
 
 const navLinks = [
   { label: 'Servicios', href: '#servicios' },
@@ -53,7 +54,7 @@ export default function Footer() {
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="flex flex-col items-center gap-3 mx-auto hover:opacity-80 transition-opacity"
           >
-            <img src="/logo-icon.png" alt="AstroCore" className="h-24 w-24 object-contain mix-blend-screen" />
+            <AstroCoreIcon size={80} />
             <span className="font-display text-2xl font-bold text-space-text tracking-wider">ASTROCORE</span>
           </button>
         </div>
