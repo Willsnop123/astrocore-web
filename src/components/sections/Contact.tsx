@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Mail, Globe, Clock, Send, CheckCircle, Loader2, MessageCircle } from 'lucide-react';
+import { Mail, Globe, Clock, Send, CheckCircle, Loader2, MessageCircle, ChevronDown } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useInView } from '@/hooks/useInView';
@@ -11,6 +11,26 @@ export default function Contact() {
   const { ref: sectionRef, isInView } = useInView({ threshold: 0.15 });
   const formRef = useRef<HTMLFormElement>(null);
   const [formState, setFormState] = useState<'idle' | 'sending' | 'sent'>('idle');
+  const [selectedProject, setSelectedProject] = useState('');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const projectOptions = [
+    { value: 'landing', label: 'Landing Page' },
+    { value: 'sitio', label: 'Sitio Web' },
+    { value: 'ecommerce', label: 'E-commerce' },
+    { value: 'otro', label: 'Otro' },
+  ];
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     if (!isInView || !formRef.current) return;
@@ -147,28 +167,60 @@ export default function Contact() {
               />
             </div>
 
-            <div className="form-field opacity-0">
-              <select
-                required
-                defaultValue=""
-                className="w-full bg-transparent border-b border-space-text-muted focus:border-space-accent py-3 text-space-text outline-none transition-colors appearance-none cursor-pointer"
+            <div className="form-field opacity-0" ref={dropdownRef}>
+              <input type="hidden" name="proyecto" value={selectedProject} required />
+              <button
+                type="button"
+                onClick={() => setDropdownOpen(o => !o)}
+                className={`w-full flex items-center justify-between border-b py-3 outline-none transition-colors duration-200 ${
+                  dropdownOpen ? 'border-space-accent' : 'border-space-text-muted'
+                }`}
               >
-                <option value="" disabled className="bg-space-bg-tertiary">
-                  Tipo de proyecto
-                </option>
-                <option value="landing" className="bg-space-bg-tertiary">
-                  Landing Page
-                </option>
-                <option value="sitio" className="bg-space-bg-tertiary">
-                  Sitio Web
-                </option>
-                <option value="ecommerce" className="bg-space-bg-tertiary">
-                  E-commerce
-                </option>
-                <option value="otro" className="bg-space-bg-tertiary">
-                  Otro
-                </option>
-              </select>
+                <span className={selectedProject ? 'text-space-text' : 'text-space-text-muted'}>
+                  {selectedProject
+                    ? projectOptions.find(o => o.value === selectedProject)?.label
+                    : 'Tipo de proyecto'}
+                </span>
+                <ChevronDown
+                  className={`w-4 h-4 text-space-text-muted transition-transform duration-300 ${dropdownOpen ? 'rotate-180' : ''}`}
+                />
+              </button>
+
+              {dropdownOpen && (
+                <div className="relative z-50">
+                  <div
+                    className="absolute top-1 left-0 right-0 rounded-xl overflow-hidden"
+                    style={{
+                      background: 'rgba(10,10,18,0.95)',
+                      border: '1px solid rgba(108,99,255,0.25)',
+                      boxShadow: '0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(108,99,255,0.08)',
+                      backdropFilter: 'blur(12px)',
+                    }}
+                  >
+                    {projectOptions.map((option, i) => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => { setSelectedProject(option.value); setDropdownOpen(false); }}
+                        className="w-full text-left px-5 py-3 text-sm transition-all duration-150 group flex items-center gap-3"
+                        style={{
+                          borderBottom: i < projectOptions.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+                          color: selectedProject === option.value ? '#6C63FF' : 'rgba(240,240,245,0.7)',
+                          background: selectedProject === option.value ? 'rgba(108,99,255,0.08)' : 'transparent',
+                        }}
+                        onMouseEnter={e => (e.currentTarget.style.background = 'rgba(108,99,255,0.12)')}
+                        onMouseLeave={e => (e.currentTarget.style.background = selectedProject === option.value ? 'rgba(108,99,255,0.08)' : 'transparent')}
+                      >
+                        <span
+                          className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                          style={{ background: selectedProject === option.value ? '#6C63FF' : 'rgba(255,255,255,0.2)' }}
+                        />
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="form-field opacity-0">
