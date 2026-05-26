@@ -5,32 +5,28 @@ import TypewriterText from '@/components/effects/TypewriterText';
 
 const projects = [
   {
-    title: 'Nebula Store',
-    tag: 'E-commerce',
-    description: 'Plataforma de venta online con catálogo de 500+ productos y pagos integrados.',
-    url: '#',
-    image: '/portfolio/portfolio-1.jpg',
-  },
-  {
-    title: 'Cosmo Tech',
+    title: 'Proyecto 1',
     tag: 'Sitio Web',
-    description: 'Presencia digital para empresa de soluciones cloud con dashboard interactivo.',
+    description: 'Descripción del proyecto 1.',
     url: '#',
-    image: '/portfolio/portfolio-2.jpg',
+    desktopImg: '/portfolio/escritorio1.png',
+    mobileImg:  '/portfolio/movil1.jpeg',
   },
   {
-    title: 'Lunar Clinic',
-    tag: 'Landing Page',
-    description: 'Página de conversión de alto rendimiento para clínica estética premium.',
+    title: 'Proyecto 2',
+    tag: 'Sitio Web',
+    description: 'Descripción del proyecto 2.',
     url: '#',
-    image: '/portfolio/portfolio-3.jpg',
+    desktopImg: '/portfolio/escritorio2.png',
+    mobileImg:  '/portfolio/movil2.jpeg',
   },
   {
-    title: 'Galaxy Fitness',
-    tag: 'Landing Page',
-    description: 'Diseño de alta conversión para cadena de gimnasios con integración de turnos.',
+    title: 'WB Service',
+    tag: 'Sitio Web',
+    description: 'Descripción del proyecto 3.',
     url: '#',
-    image: '/portfolio/portfolio-4.jpg',
+    desktopImg: '/portfolio/escritorio3.png',
+    mobileImg:  '/portfolio/movil3.jpeg',
   },
 ];
 
@@ -237,11 +233,11 @@ export default function Portfolio() {
           <div className="flex items-end justify-center">
             {/* Monitor — hidden on mobile */}
             <div className="hidden md:block">
-              <SpaceMonitor imgSrc={proj.image} />
+              <SpaceMonitor imgSrc={proj.desktopImg} />
             </div>
             {/* Phone — overlaps monitor on desktop, centered on mobile */}
             <div className="relative md:-ml-10 z-10" style={{ marginBottom: 20 }}>
-              <SpacePhone imgSrc={proj.image} />
+              <SpacePhone imgSrc={proj.mobileImg} />
             </div>
           </div>
 
