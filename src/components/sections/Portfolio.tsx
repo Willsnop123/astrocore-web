@@ -89,7 +89,7 @@ function SpaceMonitor({ imgSrc }: { imgSrc: string }) {
             key={imgSrc}
             src={imgSrc}
             alt="portfolio preview"
-            className="w-full h-full object-cover object-top"
+            className="w-full h-full object-contain object-top"
             style={{ animation: 'fadeInDevice 0.7s ease forwards' }}
           />
           {/* Subtle scanlines */}
