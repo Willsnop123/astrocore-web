@@ -167,7 +167,7 @@ export default function Contact() {
               />
             </div>
 
-            <div className="form-field opacity-0" ref={dropdownRef}>
+            <div className="form-field opacity-0" ref={dropdownRef} style={{ position: 'relative', zIndex: 30 }}>
               <input type="hidden" name="proyecto" value={selectedProject} required />
               <button
                 type="button"
