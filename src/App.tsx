@@ -11,6 +11,8 @@ import Contact from '@/components/sections/Contact';
 import CustomCursor from '@/components/effects/CustomCursor';
 import SupernovaEffect from '@/components/effects/SupernovaEffect';
 import WhatsAppButton from '@/components/ui/WhatsAppButton';
+import GrainOverlay from '@/components/effects/GrainOverlay';
+import { useLenis } from '@/hooks/useLenis';
 
 const NebulaBackground = lazy(() => import('@/components/effects/NebulaBackground'));
 
@@ -23,6 +25,8 @@ function LoadingFallback() {
 }
 
 export default function App() {
+  useLenis();
+
   return (
     <div className="relative min-h-screen bg-space-bg text-space-text font-body overflow-x-hidden">
       {/* Custom cursor */}
@@ -52,6 +56,9 @@ export default function App() {
 
         <Footer />
       </div>
+
+      {/* Grain texture overlay */}
+      <GrainOverlay />
 
       {/* Floating WhatsApp button */}
       <WhatsAppButton />
