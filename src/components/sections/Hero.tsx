@@ -109,7 +109,10 @@ export default function Hero() {
 
         {/* Subtitle — typewriter, under the title */}
         <div ref={subtitleRef} className="opacity-0">
-          <p className="text-lg md:text-xl text-space-text-secondary font-light min-h-[1.8rem]">
+          <p
+            className="text-lg md:text-2xl text-space-text font-light min-h-[1.8rem] tracking-wide"
+            style={{ textShadow: '0 0 24px rgba(108,99,255,0.7), 0 2px 8px rgba(0,0,0,0.8)' }}
+          >
             {subtitleText}
             <span className="animate-blink text-space-accent">_</span>
           </p>
