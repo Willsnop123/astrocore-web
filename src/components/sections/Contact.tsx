@@ -125,8 +125,8 @@ export default function Contact() {
                 <Globe className="w-5 h-5 text-space-accent" />
               </div>
               <div>
-                <p className="text-sm text-space-text-muted">UbicaciÃ³n</p>
-                <p className="text-space-text">Gualeguay, Entre RÃ­os, Argentina</p>
+                <p className="text-sm text-space-text-muted">Ubicación</p>
+                <p className="text-space-text">Gualeguay, Entre Ríos, Argentina</p>
               </div>
             </div>
 

@@ -7,23 +7,23 @@ const projects = [
   {
     title: 'Konig',
     tag: 'Sitio Web',
-    description: 'Identidad digital para cervecerÃ­a artesanal. DiseÃ±o inmersivo que transmite la esencia de cada estilo.',
+    description: 'Identidad digital para cervecería artesanal. Diseño inmersivo que transmite la esencia de cada estilo.',
     url: '#',
     desktopImg: '/portfolio/escritorio1.webp',
     mobileImg:  '/portfolio/movil1.webp',
   },
   {
-    title: 'MartÃ­n GonzÃ¡lez Cueros',
+    title: 'Martín González Cueros',
     tag: 'Sitio Web',
-    description: 'Presencia online para marroquinerÃ­a artesanal. CatÃ¡logo elegante con foco en la calidad del producto.',
+    description: 'Presencia online para marroquinería artesanal. Catálogo elegante con foco en la calidad del producto.',
     url: '#',
     desktopImg: '/portfolio/escritorio2.webp',
     mobileImg:  '/portfolio/movil2.webp',
   },
   {
-    title: 'WB Service InformÃ¡tica',
+    title: 'WB Service Informática',
     tag: 'Sitio Web',
-    description: 'Sitio institucional para servicio tÃ©cnico. Claro, rÃ¡pido y optimizado para captar clientes locales.',
+    description: 'Sitio institucional para servicio técnico. Claro, rápido y optimizado para captar clientes locales.',
     url: '#',
     desktopImg: '/portfolio/escritorio3.webp',
     mobileImg:  '/portfolio/movil3.webp',
@@ -78,7 +78,7 @@ function SpaceMonitor({ imgSrc }: { imgSrc: string }) {
             <span className="font-mono text-[8px] tracking-[0.22em] opacity-50" style={{ color: '#a0a8ff' }}>RENDER.DISPLAY</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="font-mono text-[8px] tracking-widest opacity-30" style={{ color: '#a0a8ff' }}>1920Ã—1080</span>
+            <span className="font-mono text-[8px] tracking-widest opacity-30" style={{ color: '#a0a8ff' }}>1920×1080</span>
             <span className="block w-6 h-px opacity-20" style={{ background: '#6C63FF' }} />
           </div>
         </div>
@@ -222,7 +222,7 @@ export default function Portfolio() {
             <RevealText text="TRABAJOS RECIENTES" />
           </h2>
           <p className={`text-space-text-secondary transition-all duration-700 delay-300 ${isInView ? 'opacity-100' : 'opacity-0'}`}>
-            Misiones completadas con Ã©xito
+            Misiones completadas con éxito
           </p>
         </div>
 

@@ -6,9 +6,9 @@ import RevealText from '@/components/effects/RevealText';
 
 const steps = [
   { number: '01', title: 'Descubrimiento',  description: 'Analizamos tu negocio, objetivos y audiencia para entender tu universo digital.', icon: Telescope, color: '#6C63FF', moonDur: '6s' },
-  { number: '02', title: 'DiseÃ±o',           description: 'Creamos prototipos visuales y experiencias de usuario que conectan con tu marca.',   icon: Sparkles,  color: '#FF6B9D', moonDur: '8s' },
-  { number: '03', title: 'Desarrollo',       description: 'Transformamos el diseÃ±o en cÃ³digo. Cada lÃ­nea es una estrella en tu galaxia digital.', icon: Code2,     color: '#4A90FF', moonDur: '5s' },
-  { number: '04', title: 'Lanzamiento',      description: 'Despegamos tu sitio al universo digital con optimizaciÃ³n y monitoreo continuo.',      icon: Rocket,    color: '#38E8B0', moonDur: '7s' },
+  { number: '02', title: 'Diseño',            description: 'Creamos prototipos visuales y experiencias de usuario que conectan con tu marca.',   icon: Sparkles,  color: '#FF6B9D', moonDur: '8s' },
+  { number: '03', title: 'Desarrollo',       description: 'Transformamos el diseño en código. Cada línea es una estrella en tu galaxia digital.', icon: Code2,     color: '#4A90FF', moonDur: '5s' },
+  { number: '04', title: 'Lanzamiento',      description: 'Despegamos tu sitio al universo digital con optimización y monitoreo continuo.',      icon: Rocket,    color: '#38E8B0', moonDur: '7s' },
 ];
 
 function Planet({ color, size = 52, moonDur = '7s', icon: Icon }: {
@@ -97,7 +97,7 @@ export default function Process() {
               <RevealText text="PROCESO DE TRABAJO" />
             </h2>
             <p className={`text-space-text-secondary transition-all duration-700 ${isInView ? 'opacity-100' : 'opacity-0'}`}>
-              Cada misiÃ³n sigue una trayectoria probada
+              Cada misión sigue una trayectoria probada
             </p>
           </div>
 

@@ -13,12 +13,12 @@ const services = [
     icon: Rocket,
     title: 'Landing Pages',
     description:
-      'PÃ¡ginas diseÃ±adas para convertir visitantes en clientes. RÃ¡pidas, atractivas y enfocadas en resultados.',
+      'Páginas diseñadas para convertir visitantes en clientes. Rápidas, atractivas y enfocadas en resultados.',
     features: [
-      'DiseÃ±o responsive',
-      'OptimizaciÃ³n SEO',
+      'Diseño responsive',
+      'Optimización SEO',
       'Call-to-action efectivos',
-      'Carga ultrarrÃ¡pida',
+      'Carga ultrarápida',
     ],
     orbitRadius: '120px',
     orbitDuration: '35s',
@@ -29,7 +29,7 @@ const services = [
     description:
       'Presencia web completa para tu marca. Desde sitios corporativos hasta plataformas interactivas.',
     features: [
-      'DiseÃ±o personalizado',
+      'Diseño personalizado',
       'CMS integrado',
       'Multidispositivo',
       'Escalable',
@@ -41,11 +41,11 @@ const services = [
     icon: ShoppingCart,
     title: 'E-commerce',
     description:
-      'Tiendas online que venden. IntegraciÃ³n de pagos, catÃ¡logos y gestiÃ³n de inventario.',
+      'Tiendas online que venden. Integración de pagos, catálogos y gestión de inventario.',
     features: [
       'Pasarela de pagos',
       'Carrito de compras',
-      'GestiÃ³n de productos',
+      'Gestión de productos',
       'Seguridad SSL',
     ],
     orbitRadius: '100px',

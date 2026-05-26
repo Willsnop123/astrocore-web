@@ -115,7 +115,7 @@ export default function Technologies() {
               <RevealText text="TECNOLOGIAS" />
             </h2>
             <p className={`text-space-text-secondary transition-all duration-700 ${isInView ? 'opacity-100' : 'opacity-0'}`}>
-              El stack que impulsa cada misiÃ³n
+              El stack que impulsa cada misión
             </p>
           </div>
 
