@@ -10,6 +10,7 @@ import Technologies from '@/components/sections/Technologies';
 import Contact from '@/components/sections/Contact';
 import CustomCursor from '@/components/effects/CustomCursor';
 import SupernovaEffect from '@/components/effects/SupernovaEffect';
+import WhatsAppButton from '@/components/ui/WhatsAppButton';
 
 const NebulaBackground = lazy(() => import('@/components/effects/NebulaBackground'));
 
@@ -51,6 +52,9 @@ export default function App() {
 
         <Footer />
       </div>
+
+      {/* Floating WhatsApp button */}
+      <WhatsAppButton />
     </div>
   );
 }
