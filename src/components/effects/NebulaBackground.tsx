@@ -1,4 +1,4 @@
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useEffect, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -163,7 +163,33 @@ function NebulaMesh() {
   );
 }
 
+function MobileNebula() {
+  return (
+    <>
+      <style>{`
+        @keyframes nebula-drift-1 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(3%,2%) scale(1.08); } }
+        @keyframes nebula-drift-2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-4%,3%) scale(1.06); } }
+        @keyframes nebula-drift-3 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(2%,-3%) scale(1.05); } }
+      `}</style>
+      <div className="fixed inset-0 z-0" style={{ background: '#050508' }}>
+        <div className="absolute inset-0" style={{ animation: 'nebula-drift-1 18s ease-in-out infinite', background: 'radial-gradient(ellipse 80% 60% at 25% 40%, rgba(108,40,180,0.28) 0%, transparent 65%)' }} />
+        <div className="absolute inset-0" style={{ animation: 'nebula-drift-2 24s ease-in-out infinite', background: 'radial-gradient(ellipse 70% 55% at 75% 60%, rgba(80,15,120,0.22) 0%, transparent 60%)' }} />
+        <div className="absolute inset-0" style={{ animation: 'nebula-drift-3 20s ease-in-out infinite', background: 'radial-gradient(ellipse 60% 50% at 50% 75%, rgba(40,20,100,0.18) 0%, transparent 55%)' }} />
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at center, rgba(5,5,8,0.1) 0%, rgba(5,5,8,0.35) 100%)' }} />
+      </div>
+    </>
+  );
+}
+
 export default function NebulaBackground() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.matchMedia('(pointer: coarse)').matches);
+  }, []);
+
+  if (isMobile) return <MobileNebula />;
+
   return (
     <div className="fixed inset-0 z-0">
       <Canvas
@@ -175,7 +201,7 @@ export default function NebulaBackground() {
       >
         <NebulaMesh />
       </Canvas>
-      <div 
+      <div
         className="absolute inset-0 pointer-events-none"
         style={{ background: 'radial-gradient(ellipse at center, rgba(5,5,8,0.12) 0%, rgba(5,5,8,0.3) 100%)' }}
       />
