@@ -43,9 +43,10 @@ export default function Header() {
             {/* Logo */}
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="font-display text-xl font-bold text-space-text tracking-wider hover:text-space-accent transition-colors"
+              className="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
             >
-              ASTROCORE
+              <img src="/logo-icon.png" alt="AstroCore" className="h-9 w-9 object-contain" />
+              <span className="font-display text-xl font-bold text-space-text tracking-wider">ASTROCORE</span>
             </button>
 
             {/* Desktop Nav */}
