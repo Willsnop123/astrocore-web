@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, Suspense, lazy } from 'react';
 import { ChevronDown } from 'lucide-react';
 import gsap from 'gsap';
+import Magnetic from '@/components/effects/Magnetic';
 
 const GalaxyCenter = lazy(() => import('@/components/effects/GalaxyCenter'));
 
@@ -124,14 +125,16 @@ export default function Hero() {
 
       {/* ── BOTTOM: CTA button above scroll indicator ─────────────────────── */}
       <div className="relative z-10 flex flex-col items-center gap-10 pb-10">
-        <button
-          ref={ctaRef}
-          onClick={scrollToServices}
-          className="opacity-0 translate-y-4 group flex items-center gap-3 px-8 py-4 border border-space-accent text-space-text hover:bg-space-accent/10 hover:shadow-glow transition-all duration-300 rounded-full"
-        >
-          <span className="text-sm tracking-wider">EXPLORAR SERVICIOS</span>
-          <ChevronDown className="w-4 h-4 group-hover:translate-y-1 transition-transform" />
-        </button>
+        <Magnetic strength={0.32} radius={90}>
+          <button
+            ref={ctaRef}
+            onClick={scrollToServices}
+            className="opacity-0 translate-y-4 group flex items-center gap-3 px-8 py-4 border border-space-accent text-space-text hover:bg-space-accent/10 hover:shadow-glow transition-all duration-300 rounded-full"
+          >
+            <span className="text-sm tracking-wider">EXPLORAR SERVICIOS</span>
+            <ChevronDown className="w-4 h-4 group-hover:translate-y-1 transition-transform" />
+          </button>
+        </Magnetic>
 
         {/* Scroll indicator */}
         <div ref={scrollIndicatorRef} className="opacity-0 flex flex-col items-center gap-3">

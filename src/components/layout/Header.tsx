@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, Rocket } from 'lucide-react';
+import Magnetic from '@/components/effects/Magnetic';
 
 const navLinks = [
   { label: 'Servicios', href: '#servicios' },
@@ -65,13 +66,15 @@ export default function Header() {
 
             {/* CTA Button */}
             <div className="hidden lg:block">
-              <button
-                onClick={() => scrollTo('#contacto')}
-                className="flex items-center gap-2 px-5 py-2.5 border border-space-accent text-sm text-space-text hover:bg-space-accent/10 hover:shadow-glow transition-all duration-300 rounded-full"
-              >
-                <Rocket className="w-4 h-4" />
-                INICIAR PROYECTO
-              </button>
+              <Magnetic strength={0.28} radius={70}>
+                <button
+                  onClick={() => scrollTo('#contacto')}
+                  className="flex items-center gap-2 px-5 py-2.5 border border-space-accent text-sm text-space-text hover:bg-space-accent/10 hover:shadow-glow transition-all duration-300 rounded-full"
+                >
+                  <Rocket className="w-4 h-4" />
+                  INICIAR PROYECTO
+                </button>
+              </Magnetic>
             </div>
 
             {/* Mobile Menu Toggle */}
