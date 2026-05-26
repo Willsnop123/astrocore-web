@@ -1,3 +1,4 @@
+import React from 'react';
 import { useInView } from '@/hooks/useInView';
 import TypewriterText from '@/components/effects/TypewriterText';
 
@@ -19,7 +20,7 @@ const outer = [
   { name: 'Git',        color: '#F05032' },
 ];
 
-const ICON_SVGS: Record<string, JSX.Element> = {
+const ICON_SVGS: Record<string, React.ReactElement> = {
   React:      <svg viewBox="0 0 24 24" fill="currentColor" className="w-7 h-7"><path d="M12 13.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z"/><ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="currentColor" strokeWidth="1.2"/><ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="currentColor" strokeWidth="1.2" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="currentColor" strokeWidth="1.2" transform="rotate(120 12 12)"/></svg>,
   'Next.js':  <svg viewBox="0 0 24 24" fill="currentColor" className="w-7 h-7"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2Zm3.5 13.5h-1.5L9 9.5V15H7.5V8.5H9l5 6V8.5H15.5v7Z"/></svg>,
   TypeScript: <svg viewBox="0 0 24 24" fill="currentColor" className="w-7 h-7"><rect x="2" y="2" width="20" height="20" rx="2"/><path fill="#1e1e1e" d="M6 12h5v1.5H9v5H7.5v-5H6V12Zm6.5 0h4v1.5h-1.25v5H13.75v-5H12.5V12Z"/></svg>,
@@ -35,8 +36,8 @@ const ICON_SVGS: Record<string, JSX.Element> = {
 };
 
 function OrbitRing({
-  techs, radius, duration, reverse = false, startAngle = 0,
-}: { techs: typeof inner; radius: number; duration: number; reverse?: boolean; startAngle?: number }) {
+  techs, radius, duration, reverse = false,
+}: { techs: typeof inner; radius: number; duration: number; reverse?: boolean }) {
   return (
     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
       {/* Ring visual */}
@@ -46,7 +47,6 @@ function OrbitRing({
       />
       {/* Orbiting icons */}
       {techs.map((tech, i) => {
-        const angle = startAngle + (360 / techs.length) * i;
         const delay = -(duration / techs.length) * i;
         return (
           <div
@@ -125,10 +125,10 @@ export default function Technologies() {
             style={{ width: 620, height: 620, maxWidth: '100%' }}
           >
             {/* Outer ring — CCW */}
-            <OrbitRing techs={outer} radius={290} duration={45} reverse startAngle={30} />
+            <OrbitRing techs={outer} radius={290} duration={45} reverse />
 
             {/* Inner ring — CW */}
-            <OrbitRing techs={inner} radius={190} duration={30} startAngle={0} />
+            <OrbitRing techs={inner} radius={190} duration={30} />
 
             {/* Center glow */}
             <div className="absolute inset-0 flex items-center justify-center">

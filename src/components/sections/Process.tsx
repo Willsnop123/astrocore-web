@@ -12,7 +12,7 @@ const steps = [
 ];
 
 function Planet({ color, size = 52, moonDur = '7s', icon: Icon }: {
-  color: string; size?: number; moonDur?: string; icon: React.ElementType;
+  color: string; size?: number; moonDur?: string; icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
 }) {
   return (
     <div className="relative flex items-center justify-center flex-shrink-0" style={{ width: size * 2.4, height: size * 2.4 }}>
