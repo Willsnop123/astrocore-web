@@ -53,7 +53,7 @@ export default function Footer() {
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="flex flex-col items-center gap-3 mx-auto hover:opacity-80 transition-opacity"
           >
-            <img src="/logo-icon.png" alt="AstroCore" className="h-14 w-14 object-contain" />
+            <img src="/logo-icon.png" alt="AstroCore" className="h-14 w-14 object-contain mix-blend-screen" />
             <span className="font-display text-2xl font-bold text-space-text tracking-wider">ASTROCORE</span>
           </button>
         </div>

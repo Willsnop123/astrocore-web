@@ -45,7 +45,7 @@ export default function Header() {
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               className="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
             >
-              <img src="/logo-icon.png" alt="AstroCore" className="h-9 w-9 object-contain" />
+              <img src="/logo-icon.png" alt="AstroCore" className="h-9 w-9 object-contain mix-blend-screen" />
               <span className="font-display text-xl font-bold text-space-text tracking-wider">ASTROCORE</span>
             </button>
 
