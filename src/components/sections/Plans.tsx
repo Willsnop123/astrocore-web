@@ -1,9 +1,9 @@
-import { useEffect, useRef } from 'react';
+﻿import { useEffect, useRef } from 'react';
 import { Check, Star } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useInView } from '@/hooks/useInView';
-import TypewriterText from '@/components/effects/TypewriterText';
+import RevealText from '@/components/effects/RevealText';
 import HolographicCard from '@/components/effects/HolographicCard';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -14,11 +14,11 @@ const plans = [
     subtitle: 'Landing Page',
     price: 'Desde $350.000 ARS',
     features: [
-      'Diseño de una página',
+      'DiseÃ±o de una pÃ¡gina',
       'Hasta 5 secciones',
       'Responsive design',
       'Formulario de contacto',
-      'Optimización básica SEO',
+      'OptimizaciÃ³n bÃ¡sica SEO',
     ],
     highlighted: false,
     cta: 'CONSULTAR',
@@ -28,10 +28,10 @@ const plans = [
     subtitle: 'Sitio Web',
     price: 'Desde $550.000 ARS',
     features: [
-      'Hasta 5 páginas',
+      'Hasta 5 pÃ¡ginas',
       'CMS integrado',
       'Blog / Noticias',
-      'Galerías y multimedia',
+      'GalerÃ­as y multimedia',
       'SEO avanzado',
       'Analytics integrado',
     ],
@@ -45,11 +45,11 @@ const plans = [
     price: 'Desde $900.000 ARS',
     features: [
       'Todo lo del plan Sitio Web',
-      'Catálogo de productos',
+      'CatÃ¡logo de productos',
       'Carrito de compras',
       'Pasarela de pagos',
-      'Gestión de inventario',
-      'Panel de administración',
+      'GestiÃ³n de inventario',
+      'Panel de administraciÃ³n',
     ],
     highlighted: false,
     cta: 'CONSULTAR',
@@ -96,7 +96,7 @@ export default function Plans() {
         {/* Title */}
         <div className="text-center mb-20">
           <h2 className="text-4xl md:text-6xl font-bold font-display tracking-wider text-space-text mb-6">
-            <TypewriterText text="PLANES" isInView={isInView} speed={60} />
+            <RevealText text="PLANES" />
           </h2>
           <p
             className={`text-lg text-space-text-secondary max-w-2xl mx-auto transition-all duration-1000 ${
@@ -187,3 +187,4 @@ export default function Plans() {
     </section>
   );
 }
+

@@ -1,9 +1,9 @@
-import { useEffect, useRef } from 'react';
+﻿import { useEffect, useRef } from 'react';
 import { Rocket, Globe, ShoppingCart, Check } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useInView } from '@/hooks/useInView';
-import TypewriterText from '@/components/effects/TypewriterText';
+import RevealText from '@/components/effects/RevealText';
 import HolographicCard from '@/components/effects/HolographicCard';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -13,12 +13,12 @@ const services = [
     icon: Rocket,
     title: 'Landing Pages',
     description:
-      'Páginas diseñadas para convertir visitantes en clientes. Rápidas, atractivas y enfocadas en resultados.',
+      'PÃ¡ginas diseÃ±adas para convertir visitantes en clientes. RÃ¡pidas, atractivas y enfocadas en resultados.',
     features: [
-      'Diseño responsive',
-      'Optimización SEO',
+      'DiseÃ±o responsive',
+      'OptimizaciÃ³n SEO',
       'Call-to-action efectivos',
-      'Carga ultrarrápida',
+      'Carga ultrarrÃ¡pida',
     ],
     orbitRadius: '120px',
     orbitDuration: '35s',
@@ -29,7 +29,7 @@ const services = [
     description:
       'Presencia web completa para tu marca. Desde sitios corporativos hasta plataformas interactivas.',
     features: [
-      'Diseño personalizado',
+      'DiseÃ±o personalizado',
       'CMS integrado',
       'Multidispositivo',
       'Escalable',
@@ -41,11 +41,11 @@ const services = [
     icon: ShoppingCart,
     title: 'E-commerce',
     description:
-      'Tiendas online que venden. Integración de pagos, catálogos y gestión de inventario.',
+      'Tiendas online que venden. IntegraciÃ³n de pagos, catÃ¡logos y gestiÃ³n de inventario.',
     features: [
       'Pasarela de pagos',
       'Carrito de compras',
-      'Gestión de productos',
+      'GestiÃ³n de productos',
       'Seguridad SSL',
     ],
     orbitRadius: '100px',
@@ -85,7 +85,7 @@ export default function Services() {
         {/* Title */}
         <div className="text-center mb-20">
           <h2 className="text-4xl md:text-6xl font-bold font-display tracking-wider text-space-text mb-6">
-            <TypewriterText text="SERVICIOS" isInView={isInView} speed={60} />
+            <RevealText text="SERVICIOS" />
           </h2>
           <p
             className={`text-lg text-space-text-secondary max-w-2xl mx-auto transition-all duration-1000 ${
@@ -150,3 +150,4 @@ export default function Services() {
     </section>
   );
 }
+

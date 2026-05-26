@@ -1,14 +1,14 @@
-import { useEffect, useRef } from 'react';
+﻿import { useEffect, useRef } from 'react';
 import { Telescope, Sparkles, Code2, Rocket } from 'lucide-react';
 import gsap from 'gsap';
 import { useInView } from '@/hooks/useInView';
-import TypewriterText from '@/components/effects/TypewriterText';
+import RevealText from '@/components/effects/RevealText';
 
 const steps = [
   { number: '01', title: 'Descubrimiento',  description: 'Analizamos tu negocio, objetivos y audiencia para entender tu universo digital.', icon: Telescope, color: '#6C63FF', moonDur: '6s' },
-  { number: '02', title: 'Diseño',           description: 'Creamos prototipos visuales y experiencias de usuario que conectan con tu marca.',   icon: Sparkles,  color: '#FF6B9D', moonDur: '8s' },
-  { number: '03', title: 'Desarrollo',       description: 'Transformamos el diseño en código. Cada línea es una estrella en tu galaxia digital.', icon: Code2,     color: '#4A90FF', moonDur: '5s' },
-  { number: '04', title: 'Lanzamiento',      description: 'Despegamos tu sitio al universo digital con optimización y monitoreo continuo.',      icon: Rocket,    color: '#38E8B0', moonDur: '7s' },
+  { number: '02', title: 'DiseÃ±o',           description: 'Creamos prototipos visuales y experiencias de usuario que conectan con tu marca.',   icon: Sparkles,  color: '#FF6B9D', moonDur: '8s' },
+  { number: '03', title: 'Desarrollo',       description: 'Transformamos el diseÃ±o en cÃ³digo. Cada lÃ­nea es una estrella en tu galaxia digital.', icon: Code2,     color: '#4A90FF', moonDur: '5s' },
+  { number: '04', title: 'Lanzamiento',      description: 'Despegamos tu sitio al universo digital con optimizaciÃ³n y monitoreo continuo.',      icon: Rocket,    color: '#38E8B0', moonDur: '7s' },
 ];
 
 function Planet({ color, size = 52, moonDur = '7s', icon: Icon }: {
@@ -94,15 +94,15 @@ export default function Process() {
         <div className="relative max-w-5xl mx-auto">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-6xl font-bold font-display tracking-wider text-space-text mb-4">
-              <TypewriterText text="PROCESO DE TRABAJO" isInView={isInView} speed={50} />
+              <RevealText text="PROCESO DE TRABAJO" />
             </h2>
             <p className={`text-space-text-secondary transition-all duration-700 ${isInView ? 'opacity-100' : 'opacity-0'}`}>
-              Cada misión sigue una trayectoria probada
+              Cada misiÃ³n sigue una trayectoria probada
             </p>
           </div>
 
           <div ref={timelineRef} className="relative">
-            {/* Vertical orbit path — desktop only */}
+            {/* Vertical orbit path â€” desktop only */}
             <div
               ref={lineRef}
               className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2"
@@ -120,7 +120,7 @@ export default function Process() {
                     flex-col md:flex-row md:items-center
                     ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
                 >
-                  {/* Planet — static on mobile, absolute on desktop */}
+                  {/* Planet â€” static on mobile, absolute on desktop */}
                   <div className="planet-wrap md:absolute md:left-1/2 md:-translate-x-1/2 z-10 opacity-0 mb-2 md:mb-0">
                     <Planet color={step.color} moonDur={step.moonDur} icon={step.icon} />
                   </div>
@@ -135,7 +135,7 @@ export default function Process() {
                         <span className="text-xs tracking-[0.2em] font-mono" style={{ color: step.color }}>
                           {step.number}
                         </span>
-                        <span className="text-xs text-space-text-muted">—</span>
+                        <span className="text-xs text-space-text-muted">â€”</span>
                         <span className="text-xs tracking-widest text-space-text-muted uppercase">FASE</span>
                       </div>
                       <h3 className="text-xl font-bold text-space-text mb-2">{step.title}</h3>
@@ -143,7 +143,7 @@ export default function Process() {
                     </div>
                   </div>
 
-                  {/* Spacer — desktop only */}
+                  {/* Spacer â€” desktop only */}
                   <div className="hidden md:block w-5/12" />
                 </div>
               ))}
@@ -154,3 +154,4 @@ export default function Process() {
     </>
   );
 }
+

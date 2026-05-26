@@ -1,6 +1,6 @@
-import React from 'react';
+﻿import React from 'react';
 import { useInView } from '@/hooks/useInView';
-import TypewriterText from '@/components/effects/TypewriterText';
+import RevealText from '@/components/effects/RevealText';
 
 const inner = [
   { name: 'React',      color: '#61DAFB' },
@@ -112,10 +112,10 @@ export default function Technologies() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-6xl font-bold font-display tracking-wider text-space-text mb-4">
-              <TypewriterText text="TECNOLOGIAS" isInView={isInView} speed={50} />
+              <RevealText text="TECNOLOGIAS" />
             </h2>
             <p className={`text-space-text-secondary transition-all duration-700 ${isInView ? 'opacity-100' : 'opacity-0'}`}>
-              El stack que impulsa cada misión
+              El stack que impulsa cada misiÃ³n
             </p>
           </div>
 
@@ -124,10 +124,10 @@ export default function Technologies() {
             className="relative mx-auto"
             style={{ width: 620, height: 620, maxWidth: '100%' }}
           >
-            {/* Outer ring — CCW */}
+            {/* Outer ring â€” CCW */}
             <OrbitRing techs={outer} radius={290} duration={45} reverse />
 
-            {/* Inner ring — CW */}
+            {/* Inner ring â€” CW */}
             <OrbitRing techs={inner} radius={190} duration={30} />
 
             {/* Center glow */}
@@ -157,3 +157,4 @@ export default function Technologies() {
     </>
   );
 }
+

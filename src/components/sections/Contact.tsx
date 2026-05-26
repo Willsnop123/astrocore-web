@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef } from 'react';
+﻿import { useState, useEffect, useRef } from 'react';
 import { Mail, Globe, Clock, Send, CheckCircle, Loader2, MessageCircle, ChevronDown } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useInView } from '@/hooks/useInView';
-import TypewriterText from '@/components/effects/TypewriterText';
+import RevealText from '@/components/effects/RevealText';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -70,7 +70,7 @@ export default function Contact() {
         {/* Title */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-6xl font-bold font-display tracking-wider text-space-text mb-6">
-            <TypewriterText text="HABLEMOS" isInView={isInView} speed={60} />
+            <RevealText text="HABLEMOS" />
           </h2>
           <p
             className={`text-lg text-space-text-secondary max-w-2xl mx-auto transition-all duration-1000 ${
@@ -125,8 +125,8 @@ export default function Contact() {
                 <Globe className="w-5 h-5 text-space-accent" />
               </div>
               <div>
-                <p className="text-sm text-space-text-muted">Ubicación</p>
-                <p className="text-space-text">Gualeguay, Entre Ríos, Argentina</p>
+                <p className="text-sm text-space-text-muted">UbicaciÃ³n</p>
+                <p className="text-space-text">Gualeguay, Entre RÃ­os, Argentina</p>
               </div>
             </div>
 
@@ -268,3 +268,4 @@ export default function Contact() {
     </section>
   );
 }
+
