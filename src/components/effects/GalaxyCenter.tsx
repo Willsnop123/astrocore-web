@@ -2,8 +2,8 @@ import { useRef, useMemo, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
-// ── Particle vertex shader ────────────────────────────────────────────────────
-const vert = /* glsl */ `
+// ── Star vertex: animated orbit + mouse parallax ──────────────────────────────
+const vertStar = /* glsl */`
   attribute float aRadius;
   attribute float aInitAngle;
   attribute float aHeight;
@@ -23,7 +23,7 @@ const vert = /* glsl */ `
       sin(angle) * aRadius
     );
 
-    // Mouse parallax — subtle per-star shimmer on hover
+    // Mouse parallax — subtle per-star shimmer
     vec2 mw  = u_mouse * 3.5;
     vec2 dv  = pos.xz - mw;
     float ld = max(length(dv), 0.01);
@@ -32,15 +32,14 @@ const vert = /* glsl */ `
     pos.y  += inf * 0.10;
 
     vColor = color;
-
     vec4 mvp = modelViewMatrix * vec4(pos, 1.0);
     gl_PointSize = clamp(aSize * (18.0 / -mvp.z), 0.5, 14.0);
     gl_Position  = projectionMatrix * mvp;
   }
 `;
 
-// ── Particle fragment — gaussian star glow ────────────────────────────────────
-const frag = /* glsl */ `
+// ── Star fragment: gaussian core + wide atmospheric glow ─────────────────────
+const fragStar = /* glsl */`
   varying vec3 vColor;
 
   void main() {
@@ -48,16 +47,60 @@ const frag = /* glsl */ `
     float d = length(c) * 2.0;
     if (d > 1.0) discard;
 
-    float alpha    = exp(-d * d * 2.5) * 0.92;
-    float pinpoint = exp(-d * d * 26.0) * 0.22;
-    vec3  col      = vColor + pinpoint;
+    float core     = exp(-d * d * 3.2) * 0.90;   // sharp bright core
+    float glow     = exp(-d * d * 1.0) * 0.25;   // medium glow ring
+    float atm      = exp(-d * d * 0.28) * 0.10;  // wide atmospheric halo
+    float pinpoint = exp(-d * d * 30.0) * 0.28;  // ultra-bright center spike
 
-    gl_FragColor = vec4(min(col, 1.0), alpha);
+    float alpha = core + glow + atm;
+    vec3  col   = vColor * (core + glow + atm) + pinpoint;
+
+    gl_FragColor = vec4(min(col, 1.5), alpha);
   }
 `;
 
-// ── Nucleus billboard shaders — no sphere edge, pure glow ────────────────────
-const billVert = /* glsl */ `
+// ── Gas/nebula vertex: orbit only, no mouse ───────────────────────────────────
+const vertGas = /* glsl */`
+  attribute float aRadius;
+  attribute float aInitAngle;
+  attribute float aHeight;
+  attribute float aSpeed;
+  attribute float aSize;
+
+  uniform float u_time;
+  varying vec3 vColor;
+
+  void main() {
+    float angle = aInitAngle + aSpeed * u_time;
+    vec3 pos = vec3(
+      cos(angle) * aRadius,
+      aHeight,
+      sin(angle) * aRadius
+    );
+
+    vColor = color;
+    vec4 mvp = modelViewMatrix * vec4(pos, 1.0);
+    gl_PointSize = clamp(aSize * (24.0 / -mvp.z), 4.0, 60.0);
+    gl_Position  = projectionMatrix * mvp;
+  }
+`;
+
+// ── Gas fragment: wide, very soft, atmospheric blobs ─────────────────────────
+const fragGas = /* glsl */`
+  varying vec3 vColor;
+
+  void main() {
+    vec2  c = gl_PointCoord - 0.5;
+    float d = length(c) * 2.0;
+    if (d > 1.0) discard;
+
+    float alpha = exp(-d * d * 0.55) * 0.022;
+    gl_FragColor = vec4(vColor, alpha);
+  }
+`;
+
+// ── Nucleus billboard shaders ─────────────────────────────────────────────────
+const billVert = /* glsl */`
   varying vec2 vUv;
   void main() {
     vUv = uv;
@@ -65,7 +108,7 @@ const billVert = /* glsl */ `
   }
 `;
 
-const billFrag = /* glsl */ `
+const billFrag = /* glsl */`
   uniform float u_time;
   varying vec2  vUv;
 
@@ -73,25 +116,27 @@ const billFrag = /* glsl */ `
     vec2  c = vUv - 0.5;
     float d = length(c) * 2.0;
 
-    // Three concentric glow layers — no hard edge
-    float tight  = exp(-d * d * 7.0);          // inner white core
-    float medium = exp(-d * d * 2.2) * 0.55;   // mid gold halo
-    float wide   = exp(-d * d * 0.75) * 0.22;  // outer purple corona
+    // Four concentric layers: white core → pink → violet → deep blue
+    float tight  = exp(-d * d * 7.0);
+    float medium = exp(-d * d * 2.2) * 0.65;
+    float wide   = exp(-d * d * 0.65) * 0.32;
+    float vwide  = exp(-d * d * 0.18) * 0.20;
 
     float pulse = 0.92 + 0.08 * sin(u_time * 0.65);
 
-    vec3 coreCol  = vec3(1.00, 0.98, 0.92) * pulse;
-    vec3 goldCol  = vec3(0.98, 0.78, 0.28);
-    vec3 outerCol = vec3(0.55, 0.20, 0.88);
+    vec3 whiteCol  = vec3(1.00, 0.94, 0.97) * pulse;   // warm white-pink
+    vec3 pinkCol   = vec3(1.00, 0.52, 0.80);            // hot pink
+    vec3 violetCol = vec3(0.58, 0.18, 0.95);            // deep violet
+    vec3 blueCol   = vec3(0.28, 0.14, 0.88);            // indigo-blue
 
-    vec3  col   = coreCol * tight + goldCol * medium + outerCol * wide;
-    float alpha = (tight + medium * 0.55 + wide * 0.35) * pulse;
+    vec3  col   = whiteCol * tight + pinkCol * medium + violetCol * wide + blueCol * vwide;
+    float alpha = (tight + medium * 0.65 + wide * 0.45 + vwide * 0.28) * pulse;
 
     gl_FragColor = vec4(col, alpha);
   }
 `;
 
-// ── Nucleus — billboard (always faces camera, zero visible edge) ──────────────
+// ── Nucleus billboard (always faces camera) ───────────────────────────────────
 function NucleusBillboard() {
   const meshRef = useRef<THREE.Mesh>(null);
   const matRef  = useRef<THREE.ShaderMaterial>(null);
@@ -104,7 +149,7 @@ function NucleusBillboard() {
 
   return (
     <mesh ref={meshRef} renderOrder={2}>
-      <planeGeometry args={[1.6, 1.6]} />
+      <planeGeometry args={[2.4, 2.4]} />
       <shaderMaterial
         ref={matRef}
         vertexShader={billVert}
@@ -120,69 +165,88 @@ function NucleusBillboard() {
 
 // ── Galaxy geometry builder ───────────────────────────────────────────────────
 function buildGalaxy() {
-  const MAIN  = 38000;
-  const BULGE =  5500; // 3D spherical bulge wrapping the nucleus
+  const MAIN  = 52000;
+  const BULGE =  5500;
   const HALO  =  2500;
-  const TOTAL = MAIN + BULGE + HALO;
+  const GAS   = 12000;
+
+  const TOTAL_STARS = MAIN + BULGE + HALO;
 
   const ARMS   = 3;
   const RADIUS = 5.5;
-  const SPIN   = 1.25;
+  const SPIN   = 1.85;   // tighter spiral → more defined arms
   const RAND_P = 3.6;
 
-  const bufPos    = new Float32Array(TOTAL * 3);
-  const bufCol    = new Float32Array(TOTAL * 3);
-  const bufRadius = new Float32Array(TOTAL);
-  const bufAngle  = new Float32Array(TOTAL);
-  const bufHeight = new Float32Array(TOTAL);
-  const bufSpeed  = new Float32Array(TOTAL);
-  const bufSize   = new Float32Array(TOTAL);
+  // ── Star buffers ──
+  const sPos    = new Float32Array(TOTAL_STARS * 3);
+  const sCol    = new Float32Array(TOTAL_STARS * 3);
+  const sRadius = new Float32Array(TOTAL_STARS);
+  const sAngle  = new Float32Array(TOTAL_STARS);
+  const sHeight = new Float32Array(TOTAL_STARS);
+  const sSpeed  = new Float32Array(TOTAL_STARS);
+  const sSize   = new Float32Array(TOTAL_STARS);
 
-  const white = new THREE.Color('#ffffff');
-  const warm  = new THREE.Color('#ffc87a');
-  const mid   = new THREE.Color('#9d7bff');
-  const outer = new THREE.Color('#4A90FF');
-  const haloC = new THREE.Color('#6680cc');
+  // ── Gas buffers ──
+  const gPos    = new Float32Array(GAS * 3);
+  const gCol    = new Float32Array(GAS * 3);
+  const gRadius = new Float32Array(GAS);
+  const gAngle  = new Float32Array(GAS);
+  const gHeight = new Float32Array(GAS);
+  const gSpeed  = new Float32Array(GAS);
+  const gSize   = new Float32Array(GAS);
+
+  // ── Color palette — purple / pink / blue (matches reference) ──
+  const coreWhite = new THREE.Color('#fff5ff');   // near-white, hint of pink
+  const innerPink = new THREE.Color('#ff79c6');   // hot pink (inner arms)
+  const midViolet = new THREE.Color('#bd93f9');   // lavender/violet
+  const indigo    = new THREE.Color('#6272a4');   // indigo-blue
+  const outerBlue = new THREE.Color('#4A90FF');   // pure blue (outer arms)
+  const haloColor = new THREE.Color('#2e4a9e');   // deep blue halo
+
+  // Gas nebula colors
+  const gasInner  = new THREE.Color('#e060a0');   // pink-magenta gas
+  const gasArm    = new THREE.Color('#8840cc');   // violet gas
+  const gasOuter  = new THREE.Color('#3a55cc');   // blue gas
 
   const rand = () =>
     Math.pow(Math.random(), RAND_P) * (Math.random() < 0.5 ? 1 : -1);
 
-  // ── Spiral arms ──────────────────────────────────────────────────────────
+  // ── Spiral arm stars ──────────────────────────────────────────────────────
   for (let i = 0; i < MAIN; i++) {
     const r      = Math.pow(Math.random(), 0.52) * RADIUS;
     const branch = (i % ARMS) / ARMS * Math.PI * 2;
     const spin   = r * SPIN;
 
-    // More scatter near center → separation feel when zooming in
-    const scatter = 0.22 + (1.0 - r / RADIUS) * 0.18;
+    // Tighter scatter than before → more defined arm lanes
+    const scatter = 0.16 + (1.0 - r / RADIUS) * 0.14;
     const px = Math.cos(branch + spin) * r + rand() * scatter * r;
     const pz = Math.sin(branch + spin) * r + rand() * scatter * r;
-    const py = rand() * 0.06 * r;
+    const py = rand() * 0.05 * r;
 
     const ar = Math.sqrt(px * px + pz * pz);
     const aa = Math.atan2(pz, px);
 
-    bufRadius[i] = ar;
-    bufAngle[i]  = aa;
-    bufHeight[i] = py;
-    bufSpeed[i]  = 0.13 / Math.sqrt(ar + 0.12);
+    sRadius[i] = ar;
+    sAngle[i]  = aa;
+    sHeight[i] = py;
+    sSpeed[i]  = 0.13 / Math.sqrt(ar + 0.12);
 
-    // Inner stars slightly larger — feel closer
     const innerBoost = Math.max(0, 1.0 - r / (RADIUS * 0.4));
-    bufSize[i] = Math.random() * 2.0 + 0.5 + innerBoost * 1.5;
+    sSize[i] = Math.random() * 2.0 + 0.5 + innerBoost * 1.5;
 
-    bufPos[i*3] = px; bufPos[i*3+1] = py; bufPos[i*3+2] = pz;
+    sPos[i*3] = px; sPos[i*3+1] = py; sPos[i*3+2] = pz;
 
     const t = Math.min(r / RADIUS, 1);
     let c: THREE.Color;
-    if      (t < 0.12) c = white.clone().lerp(warm, t / 0.12);
-    else if (t < 0.45) c = warm.clone().lerp(mid,  (t - 0.12) / 0.33);
-    else               c = mid.clone().lerp(outer, (t - 0.45) / 0.55);
+    if      (t < 0.08) c = coreWhite.clone().lerp(innerPink, t / 0.08);
+    else if (t < 0.32) c = innerPink.clone().lerp(midViolet, (t - 0.08) / 0.24);
+    else if (t < 0.62) c = midViolet.clone().lerp(indigo,    (t - 0.32) / 0.30);
+    else               c = indigo.clone().lerp(outerBlue,    (t - 0.62) / 0.38);
 
-    bufCol[i*3] = c.r; bufCol[i*3+1] = c.g; bufCol[i*3+2] = c.b;
+    sCol[i*3] = c.r; sCol[i*3+1] = c.g; sCol[i*3+2] = c.b;
   }
 
-  // ── 3D spherical bulge wrapping the billboard nucleus ────────────────────
+  // ── Spherical bulge (wraps the nucleus) ───────────────────────────────────
   for (let i = MAIN; i < MAIN + BULGE; i++) {
     const theta = Math.random() * Math.PI * 2;
     const phi   = Math.acos(2 * Math.random() - 1);
@@ -195,45 +259,78 @@ function buildGalaxy() {
     const ar = Math.sqrt(px * px + pz * pz);
     const aa = Math.atan2(pz, px);
 
-    bufRadius[i] = ar;
-    bufAngle[i]  = aa;
-    bufHeight[i] = py;
-    bufSpeed[i]  = ar > 0.01 ? 0.24 / Math.sqrt(ar + 0.03) : 0;
-    bufSize[i]   = Math.random() * 2.8 + 1.0;
-    bufPos[i*3]  = px; bufPos[i*3+1] = py; bufPos[i*3+2] = pz;
+    sRadius[i] = ar;
+    sAngle[i]  = aa;
+    sHeight[i] = py;
+    sSpeed[i]  = ar > 0.01 ? 0.24 / Math.sqrt(ar + 0.03) : 0;
+    sSize[i]   = Math.random() * 2.8 + 1.0;
+    sPos[i*3]  = px; sPos[i*3+1] = py; sPos[i*3+2] = pz;
 
     const t = r / 0.65;
-    const c = white.clone().lerp(warm, t * 0.72);
-    bufCol[i*3] = c.r; bufCol[i*3+1] = c.g; bufCol[i*3+2] = c.b;
+    const c = coreWhite.clone().lerp(innerPink, t * 0.55);
+    sCol[i*3] = c.r; sCol[i*3+1] = c.g; sCol[i*3+2] = c.b;
   }
 
   // ── Outer halo ────────────────────────────────────────────────────────────
-  for (let i = MAIN + BULGE; i < TOTAL; i++) {
+  for (let i = MAIN + BULGE; i < TOTAL_STARS; i++) {
     const r  = RADIUS + Math.random() * RADIUS * 0.9;
     const a  = Math.random() * Math.PI * 2;
     const py = (Math.random() - 0.5) * r * 0.28;
 
-    bufRadius[i] = r;
-    bufAngle[i]  = a;
-    bufHeight[i] = py;
-    bufSpeed[i]  = 0.030 / Math.sqrt(r);
-    bufSize[i]   = Math.random() * 1.0 + 0.3;
-    bufPos[i*3]  = Math.cos(a)*r; bufPos[i*3+1] = py; bufPos[i*3+2] = Math.sin(a)*r;
-    bufCol[i*3]  = haloC.r * 0.38; bufCol[i*3+1] = haloC.g * 0.38; bufCol[i*3+2] = haloC.b * 0.48;
+    sRadius[i] = r;
+    sAngle[i]  = a;
+    sHeight[i] = py;
+    sSpeed[i]  = 0.030 / Math.sqrt(r);
+    sSize[i]   = Math.random() * 1.0 + 0.3;
+    sPos[i*3]  = Math.cos(a)*r; sPos[i*3+1] = py; sPos[i*3+2] = Math.sin(a)*r;
+    sCol[i*3]  = haloColor.r * 0.42; sCol[i*3+1] = haloColor.g * 0.42; sCol[i*3+2] = haloColor.b * 0.52;
   }
 
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute('position',   new THREE.BufferAttribute(bufPos,    3));
-  geo.setAttribute('color',      new THREE.BufferAttribute(bufCol,    3));
-  geo.setAttribute('aRadius',    new THREE.BufferAttribute(bufRadius, 1));
-  geo.setAttribute('aInitAngle', new THREE.BufferAttribute(bufAngle,  1));
-  geo.setAttribute('aHeight',    new THREE.BufferAttribute(bufHeight, 1));
-  geo.setAttribute('aSpeed',     new THREE.BufferAttribute(bufSpeed,  1));
-  geo.setAttribute('aSize',      new THREE.BufferAttribute(bufSize,   1));
+  // ── Gas / nebula particles ────────────────────────────────────────────────
+  // Larger, very transparent blobs along the spiral arms — create the
+  // gaseous cloud atmosphere seen in the reference image.
+  for (let i = 0; i < GAS; i++) {
+    const r      = Math.pow(Math.random(), 0.55) * RADIUS * 0.92;
+    const branch = (i % ARMS) / ARMS * Math.PI * 2;
+    const spin   = r * SPIN;
 
-  const mat = new THREE.ShaderMaterial({
-    vertexShader:   vert,
-    fragmentShader: frag,
+    // Wide scatter → diffuse gas clouds rather than sharp arm lines
+    const scatter = 0.40 + (1.0 - r / RADIUS) * 0.30;
+    const px = Math.cos(branch + spin) * r + (Math.random() - 0.5) * scatter * r * 2.0;
+    const pz = Math.sin(branch + spin) * r + (Math.random() - 0.5) * scatter * r * 2.0;
+    const py = (Math.random() - 0.5) * 0.14 * r;
+
+    const ar = Math.sqrt(px * px + pz * pz);
+    const aa = Math.atan2(pz, px);
+
+    gRadius[i] = ar;
+    gAngle[i]  = aa;
+    gHeight[i] = py;
+    gSpeed[i]  = 0.09 / Math.sqrt(ar + 0.18);
+    gSize[i]   = Math.random() * 9.0 + 5.0;   // large blobs
+    gPos[i*3]  = px; gPos[i*3+1] = py; gPos[i*3+2] = pz;
+
+    const t = Math.min(r / RADIUS, 1);
+    let c: THREE.Color;
+    if      (t < 0.22) c = gasInner.clone().lerp(gasArm,   t / 0.22);
+    else               c = gasArm.clone().lerp(gasOuter,   (t - 0.22) / 0.78);
+
+    gCol[i*3] = c.r; gCol[i*3+1] = c.g; gCol[i*3+2] = c.b;
+  }
+
+  // ── Star geometry ──────────────────────────────────────────────────────────
+  const starGeo = new THREE.BufferGeometry();
+  starGeo.setAttribute('position',   new THREE.BufferAttribute(sPos,    3));
+  starGeo.setAttribute('color',      new THREE.BufferAttribute(sCol,    3));
+  starGeo.setAttribute('aRadius',    new THREE.BufferAttribute(sRadius, 1));
+  starGeo.setAttribute('aInitAngle', new THREE.BufferAttribute(sAngle,  1));
+  starGeo.setAttribute('aHeight',    new THREE.BufferAttribute(sHeight, 1));
+  starGeo.setAttribute('aSpeed',     new THREE.BufferAttribute(sSpeed,  1));
+  starGeo.setAttribute('aSize',      new THREE.BufferAttribute(sSize,   1));
+
+  const starMat = new THREE.ShaderMaterial({
+    vertexShader:   vertStar,
+    fragmentShader: fragStar,
     uniforms: {
       u_time:  { value: 0 },
       u_mouse: { value: new THREE.Vector2() },
@@ -244,17 +341,38 @@ function buildGalaxy() {
     vertexColors: true,
   });
 
-  return { geo, mat };
+  // ── Gas geometry ───────────────────────────────────────────────────────────
+  const gasGeo = new THREE.BufferGeometry();
+  gasGeo.setAttribute('position',   new THREE.BufferAttribute(gPos,    3));
+  gasGeo.setAttribute('color',      new THREE.BufferAttribute(gCol,    3));
+  gasGeo.setAttribute('aRadius',    new THREE.BufferAttribute(gRadius, 1));
+  gasGeo.setAttribute('aInitAngle', new THREE.BufferAttribute(gAngle,  1));
+  gasGeo.setAttribute('aHeight',    new THREE.BufferAttribute(gHeight, 1));
+  gasGeo.setAttribute('aSpeed',     new THREE.BufferAttribute(gSpeed,  1));
+  gasGeo.setAttribute('aSize',      new THREE.BufferAttribute(gSize,   1));
+
+  const gasMat = new THREE.ShaderMaterial({
+    vertexShader:   vertGas,
+    fragmentShader: fragGas,
+    uniforms: { u_time: { value: 0 } },
+    transparent:  true,
+    depthWrite:   false,
+    blending:     THREE.AdditiveBlending,
+    vertexColors: true,
+  });
+
+  return { starGeo, starMat, gasGeo, gasMat };
 }
 
-// ── Galaxy particle mesh ──────────────────────────────────────────────────────
+// ── Galaxy mesh (stars + gas in a single rotating group) ─────────────────────
 function GalaxyMesh() {
   const mouseRaw  = useRef(new THREE.Vector2());
   const mouseSoft = useRef(new THREE.Vector2());
+  const groupRef  = useRef<THREE.Group>(null);
 
-  const { geo, mat } = useMemo(buildGalaxy, []);
-  const points       = useMemo(() => new THREE.Points(geo, mat), [geo, mat]);
-  const ptRef        = useRef<THREE.Points>(points);
+  const { starGeo, starMat, gasGeo, gasMat } = useMemo(buildGalaxy, []);
+  const stars = useMemo(() => new THREE.Points(starGeo, starMat), [starGeo, starMat]);
+  const gas   = useMemo(() => new THREE.Points(gasGeo,  gasMat),  [gasGeo,  gasMat]);
 
   useEffect(() => {
     const fn = (e: MouseEvent) => {
@@ -267,20 +385,31 @@ function GalaxyMesh() {
     return () => window.removeEventListener('mousemove', fn);
   }, []);
 
-  useEffect(() => () => { geo.dispose(); mat.dispose(); }, [geo, mat]);
+  useEffect(() => () => {
+    starGeo.dispose(); starMat.dispose();
+    gasGeo.dispose();  gasMat.dispose();
+  }, [starGeo, starMat, gasGeo, gasMat]);
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
     mouseSoft.current.lerp(mouseRaw.current, 0.035);
 
-    mat.uniforms.u_time.value = t;
-    mat.uniforms.u_mouse.value.copy(mouseSoft.current);
+    starMat.uniforms.u_time.value = t;
+    starMat.uniforms.u_mouse.value.copy(mouseSoft.current);
+    gasMat.uniforms.u_time.value  = t;
 
-    points.rotation.x = -0.18;
-    points.rotation.y = t * 0.008;
+    if (groupRef.current) {
+      groupRef.current.rotation.x = -0.22;   // slight tilt — shows spiral arms
+      groupRef.current.rotation.y = t * 0.008;
+    }
   });
 
-  return <primitive object={points} ref={ptRef} />;
+  return (
+    <group ref={groupRef}>
+      <primitive object={gas}   />   {/* gas behind stars */}
+      <primitive object={stars} />   {/* stars on top */}
+    </group>
+  );
 }
 
 // ── Full scene ────────────────────────────────────────────────────────────────
@@ -297,7 +426,7 @@ export default function GalaxyCenter() {
   return (
     <div className="absolute inset-0 z-0 pointer-events-none">
       <Canvas
-        camera={{ position: [0, 5.0, 9.5], fov: 62 }}
+        camera={{ position: [0, 5.2, 9.2], fov: 62 }}
         dpr={[1, 1.2]}
         gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
       >
