@@ -85,15 +85,23 @@ export default function Process() {
   return (
     <>
       <style>{`
-        @keyframes orbit-cw  { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes orbit-cw { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes cometSlide { 0% { top:0%; opacity:0; } 5% { opacity:1; } 93% { opacity:0.6; } 100% { top:100%; opacity:0; } }
       `}</style>
 
       <section id="proceso" ref={sectionRef} className="relative min-h-[80vh] py-32 px-6">
         <div className="absolute inset-0 bg-gradient-to-b from-space-bg via-space-bg-secondary to-space-bg pointer-events-none" />
+        {/* Section atmosphere */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute rounded-full" style={{ width: 650, height: 650, top: '5%', left: '-18%', background: 'radial-gradient(circle, rgba(108,99,255,0.12) 0%, transparent 65%)' }} />
+          <div className="absolute rounded-full" style={{ width: 520, height: 520, bottom: '8%', right: '-12%', background: 'radial-gradient(circle, rgba(74,144,255,0.10) 0%, transparent 65%)' }} />
+          <div className="absolute rounded-full" style={{ width: 300, height: 300, top: '45%', left: '42%', background: 'radial-gradient(circle, rgba(56,232,176,0.05) 0%, transparent 65%)' }} />
+        </div>
 
         <div className="relative max-w-5xl mx-auto">
           <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-6xl font-bold font-display tracking-wider text-space-text mb-4">
+            <h2 className="text-4xl md:text-6xl font-bold font-display tracking-wider text-space-text mb-4"
+                style={{ filter: 'drop-shadow(0 0 32px rgba(108,99,255,0.45))' }}>
               <RevealText text="PROCESO DE TRABAJO" />
             </h2>
             <p className={`text-space-text-secondary transition-all duration-700 ${isInView ? 'opacity-100' : 'opacity-0'}`}>
@@ -102,15 +110,31 @@ export default function Process() {
           </div>
 
           <div ref={timelineRef} className="relative">
-            {/* Vertical orbit path â€” desktop only */}
+            {/* Vertical orbit path — desktop only */}
             <div
               ref={lineRef}
               className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2"
               style={{
-                background: 'linear-gradient(to bottom, rgba(108,99,255,0.6) 0%, rgba(74,144,255,0.4) 50%, transparent 100%)',
+                background: 'linear-gradient(to bottom, rgba(108,99,255,0.7) 0%, rgba(74,144,255,0.5) 55%, transparent 100%)',
                 transformOrigin: 'top',
+                boxShadow: '0 0 8px rgba(108,99,255,0.25)',
               }}
             />
+            {/* Comet traveling down the timeline */}
+            {isInView && (
+              <div
+                className="hidden md:block absolute left-1/2 -translate-x-1/2 z-20 rounded-full"
+                style={{
+                  width: 7, height: 7,
+                  background: '#ffffff',
+                  boxShadow: '0 0 10px rgba(108,99,255,1), 0 0 28px rgba(108,99,255,0.6), 0 0 50px rgba(74,144,255,0.3)',
+                  animation: 'cometSlide 2.8s ease-in-out 0.4s forwards',
+                  top: 0,
+                  opacity: 0,
+                  position: 'absolute',
+                }}
+              />
+            )}
 
             <div className="space-y-10 md:space-y-20">
               {steps.map((step, index) => (
@@ -120,7 +144,7 @@ export default function Process() {
                     flex-col md:flex-row md:items-center
                     ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
                 >
-                  {/* Planet â€” static on mobile, absolute on desktop */}
+                  {/* Planet â€" static on mobile, absolute on desktop */}
                   <div className="planet-wrap md:absolute md:left-1/2 md:-translate-x-1/2 z-10 opacity-0 mb-2 md:mb-0">
                     <Planet color={step.color} moonDur={step.moonDur} icon={step.icon} />
                   </div>
@@ -135,7 +159,7 @@ export default function Process() {
                         <span className="text-xs tracking-[0.2em] font-mono" style={{ color: step.color }}>
                           {step.number}
                         </span>
-                        <span className="text-xs text-space-text-muted">â€”</span>
+                        <span className="text-xs text-space-text-muted">â€"</span>
                         <span className="text-xs tracking-widest text-space-text-muted uppercase">FASE</span>
                       </div>
                       <h3 className="text-xl font-bold text-space-text mb-2">{step.title}</h3>
@@ -143,7 +167,7 @@ export default function Process() {
                     </div>
                   </div>
 
-                  {/* Spacer â€” desktop only */}
+                  {/* Spacer â€" desktop only */}
                   <div className="hidden md:block w-5/12" />
                 </div>
               ))}

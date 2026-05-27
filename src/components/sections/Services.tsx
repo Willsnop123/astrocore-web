@@ -81,10 +81,25 @@ export default function Services() {
       ref={sectionRef}
       className="relative min-h-screen py-32 px-6"
     >
+      {/* Section atmosphere */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute rounded-full" style={{ width: 800, height: 800, top: '-20%', right: '-15%', background: 'radial-gradient(circle, rgba(108,99,255,0.13) 0%, transparent 65%)' }} />
+        <div className="absolute rounded-full" style={{ width: 550, height: 550, bottom: '-5%', left: '-10%', background: 'radial-gradient(circle, rgba(74,144,255,0.10) 0%, transparent 65%)' }} />
+        {/* Orbit ring decorations top-right */}
+        <div className="absolute rounded-full" style={{ width: 480, height: 480, top: '-120px', right: '-120px', border: '1px solid rgba(108,99,255,0.09)' }} />
+        <div className="absolute rounded-full" style={{ width: 310, height: 310, top: '-60px', right: '-60px', border: '1px solid rgba(108,99,255,0.06)' }} />
+        {/* HUD corner brackets */}
+        <div className="absolute top-8 left-8 w-8 h-8" style={{ borderLeft: '2px solid rgba(108,99,255,0.25)', borderTop: '2px solid rgba(108,99,255,0.25)' }} />
+        <div className="absolute top-8 right-8 w-8 h-8" style={{ borderRight: '2px solid rgba(108,99,255,0.25)', borderTop: '2px solid rgba(108,99,255,0.25)' }} />
+        <div className="absolute bottom-8 left-8 w-8 h-8" style={{ borderLeft: '2px solid rgba(108,99,255,0.25)', borderBottom: '2px solid rgba(108,99,255,0.25)' }} />
+        <div className="absolute bottom-8 right-8 w-8 h-8" style={{ borderRight: '2px solid rgba(108,99,255,0.25)', borderBottom: '2px solid rgba(108,99,255,0.25)' }} />
+      </div>
+
       <div className="max-w-7xl mx-auto">
         {/* Title */}
         <div className="text-center mb-20">
-          <h2 className="text-4xl md:text-6xl font-bold font-display tracking-wider text-space-text mb-6">
+          <h2 className="text-4xl md:text-6xl font-bold font-display tracking-wider text-space-text mb-6"
+              style={{ filter: 'drop-shadow(0 0 32px rgba(108,99,255,0.45))' }}>
             <RevealText text="SERVICIOS" />
           </h2>
           <p

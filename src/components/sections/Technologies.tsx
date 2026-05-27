@@ -109,9 +109,17 @@ export default function Technologies() {
       `}</style>
 
       <section ref={sectionRef} className="relative py-32 px-6 overflow-hidden">
+        {/* Section atmosphere */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute rounded-full" style={{ width: 950, height: 950, top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'radial-gradient(circle, rgba(108,99,255,0.09) 0%, transparent 58%)' }} />
+          <div className="absolute rounded-full" style={{ width: 480, height: 480, top: '-5%', left: '-8%', background: 'radial-gradient(circle, rgba(74,144,255,0.08) 0%, transparent 65%)' }} />
+          <div className="absolute rounded-full" style={{ width: 400, height: 400, bottom: '-5%', right: '-6%', background: 'radial-gradient(circle, rgba(108,99,255,0.08) 0%, transparent 65%)' }} />
+        </div>
+
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-6xl font-bold font-display tracking-wider text-space-text mb-4">
+            <h2 className="text-4xl md:text-6xl font-bold font-display tracking-wider text-space-text mb-4"
+                style={{ filter: 'drop-shadow(0 0 32px rgba(108,99,255,0.45))' }}>
               <RevealText text="TECNOLOGIAS" />
             </h2>
             <p className={`text-space-text-secondary transition-all duration-700 ${isInView ? 'opacity-100' : 'opacity-0'}`}>
@@ -124,18 +132,23 @@ export default function Technologies() {
             className="relative mx-auto"
             style={{ width: 620, height: 620, maxWidth: '100%' }}
           >
-            {/* Outer ring â€” CCW */}
+            {/* Outer ring â€" CCW */}
             <OrbitRing techs={outer} radius={290} duration={45} reverse />
 
-            {/* Inner ring â€” CW */}
+            {/* Inner ring â€" CW */}
             <OrbitRing techs={inner} radius={190} duration={30} />
 
             {/* Center glow */}
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="relative flex items-center justify-center">
+                {/* Outer slow pulse ring */}
                 <div
                   className="absolute rounded-full animate-pulse"
-                  style={{ width: 90, height: 90, background: 'radial-gradient(circle, rgba(108,99,255,0.25) 0%, transparent 70%)' }}
+                  style={{ width: 130, height: 130, background: 'radial-gradient(circle, rgba(108,99,255,0.12) 0%, transparent 70%)', animationDuration: '3s' }}
+                />
+                <div
+                  className="absolute rounded-full animate-pulse"
+                  style={{ width: 90, height: 90, background: 'radial-gradient(circle, rgba(108,99,255,0.28) 0%, transparent 70%)', animationDuration: '2s' }}
                 />
                 <div
                   className="relative rounded-full flex flex-col items-center justify-center text-center"

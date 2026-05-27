@@ -87,15 +87,30 @@ export default function Plans() {
   };
 
   return (
+    <>
+    <style>{`
+      @keyframes scanShimmer {
+        0%   { transform: translateX(-160%); }
+        100% { transform: translateX(260%); }
+      }
+    `}</style>
     <section
       id="planes"
       ref={sectionRef}
       className="relative min-h-screen py-32 px-6"
     >
+      {/* Section atmosphere */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute rounded-full" style={{ width: 900, height: 600, top: '15%', left: '50%', transform: 'translateX(-50%)', background: 'radial-gradient(circle, rgba(108,99,255,0.10) 0%, transparent 60%)' }} />
+        <div className="absolute rounded-full" style={{ width: 420, height: 420, top: '5%', left: '-8%', background: 'radial-gradient(circle, rgba(74,144,255,0.08) 0%, transparent 65%)' }} />
+        <div className="absolute rounded-full" style={{ width: 420, height: 420, bottom: '5%', right: '-8%', background: 'radial-gradient(circle, rgba(74,144,255,0.08) 0%, transparent 65%)' }} />
+      </div>
+
       <div className="max-w-7xl mx-auto">
         {/* Title */}
         <div className="text-center mb-20">
-          <h2 className="text-4xl md:text-6xl font-bold font-display tracking-wider text-space-text mb-6">
+          <h2 className="text-4xl md:text-6xl font-bold font-display tracking-wider text-space-text mb-6"
+              style={{ filter: 'drop-shadow(0 0 32px rgba(108,99,255,0.45))' }}>
             <RevealText text="PLANES" />
           </h2>
           <p
@@ -127,6 +142,25 @@ export default function Plans() {
                       : 'glass border border-white/5'
                   }`}
                 >
+                  {/* Highlighted card animated accents */}
+                  {plan.highlighted && (
+                    <>
+                      {/* Shimmer scan line at top */}
+                      <div className="absolute top-0 left-0 right-0 h-0.5 overflow-hidden rounded-t-2xl pointer-events-none">
+                        <div style={{
+                          position: 'absolute', inset: 0,
+                          background: 'linear-gradient(to right, transparent 0%, rgba(200,190,255,0.9) 50%, transparent 100%)',
+                          animation: 'scanShimmer 2.8s ease-in-out infinite',
+                        }} />
+                      </div>
+                      {/* Corner glow dots */}
+                      <span className="absolute top-2.5 left-2.5 w-1.5 h-1.5 rounded-full pointer-events-none" style={{ background: '#6C63FF', boxShadow: '0 0 10px rgba(108,99,255,0.9)' }} />
+                      <span className="absolute top-2.5 right-2.5 w-1.5 h-1.5 rounded-full pointer-events-none" style={{ background: '#6C63FF', boxShadow: '0 0 10px rgba(108,99,255,0.9)' }} />
+                      <span className="absolute bottom-2.5 left-2.5 w-1.5 h-1.5 rounded-full pointer-events-none" style={{ background: 'rgba(108,99,255,0.45)', boxShadow: '0 0 6px rgba(108,99,255,0.5)' }} />
+                      <span className="absolute bottom-2.5 right-2.5 w-1.5 h-1.5 rounded-full pointer-events-none" style={{ background: 'rgba(108,99,255,0.45)', boxShadow: '0 0 6px rgba(108,99,255,0.5)' }} />
+                    </>
+                  )}
+
                   {/* Badge */}
                   {plan.badge && (
                     <div className="absolute -top-3 right-6">
@@ -185,6 +219,7 @@ export default function Plans() {
         </div>
       </div>
     </section>
+    </>
   );
 }
 

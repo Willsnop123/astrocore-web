@@ -66,10 +66,22 @@ export default function Contact() {
       ref={sectionRef}
       className="relative min-h-[80vh] py-32 px-6"
     >
+      {/* Section atmosphere */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute rounded-full" style={{ width: 700, height: 700, top: '-5%', left: '-15%', background: 'radial-gradient(circle, rgba(108,99,255,0.13) 0%, transparent 65%)' }} />
+        <div className="absolute rounded-full" style={{ width: 600, height: 600, bottom: '-5%', right: '-10%', background: 'radial-gradient(circle, rgba(74,144,255,0.10) 0%, transparent 65%)' }} />
+        {/* HUD corner brackets */}
+        <div className="absolute top-8 left-8 w-8 h-8" style={{ borderLeft: '2px solid rgba(108,99,255,0.22)', borderTop: '2px solid rgba(108,99,255,0.22)' }} />
+        <div className="absolute top-8 right-8 w-8 h-8" style={{ borderRight: '2px solid rgba(108,99,255,0.22)', borderTop: '2px solid rgba(108,99,255,0.22)' }} />
+        <div className="absolute bottom-8 left-8 w-8 h-8" style={{ borderLeft: '2px solid rgba(108,99,255,0.22)', borderBottom: '2px solid rgba(108,99,255,0.22)' }} />
+        <div className="absolute bottom-8 right-8 w-8 h-8" style={{ borderRight: '2px solid rgba(108,99,255,0.22)', borderBottom: '2px solid rgba(108,99,255,0.22)' }} />
+      </div>
+
       <div className="max-w-6xl mx-auto">
         {/* Title */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-6xl font-bold font-display tracking-wider text-space-text mb-6">
+          <h2 className="text-4xl md:text-6xl font-bold font-display tracking-wider text-space-text mb-6"
+              style={{ filter: 'drop-shadow(0 0 32px rgba(108,99,255,0.45))' }}>
             <RevealText text="HABLEMOS" />
           </h2>
           <p
@@ -144,6 +156,22 @@ export default function Contact() {
               <p className="text-space-text-muted italic text-sm">
                 "Cada gran viaje comienza con una transmision."
               </p>
+
+              {/* HUD mission coordinates */}
+              <div className="mt-6 font-mono leading-relaxed select-none"
+                style={{ color: 'rgba(160,168,255,0.38)', fontSize: '10px', letterSpacing: '0.18em' }}>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="inline-block w-4 h-px" style={{ background: 'rgba(108,99,255,0.45)' }} />
+                  COORDENADAS DE MISION
+                </div>
+                <div>LAT 33°09&apos;S &nbsp;·&nbsp; LON 059°21&apos;W</div>
+                <div className="flex items-center gap-2 mt-1.5">
+                  <span className="inline-block w-1.5 h-1.5 rounded-full flex-shrink-0 animate-pulse"
+                    style={{ background: '#38E8B0', boxShadow: '0 0 7px rgba(56,232,176,0.8)' }} />
+                  SEÑAL ESTABLE &nbsp;·&nbsp; ONLINE
+                </div>
+                <div className="mt-1">SYS.STATUS: OPERACIONAL</div>
+              </div>
             </div>
           </div>
 
