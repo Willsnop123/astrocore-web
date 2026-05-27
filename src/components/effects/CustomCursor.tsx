@@ -1,6 +1,17 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 
+/**
+ * Premium custom cursor inspired by high-end agency sites (fiddle.digital / string-tune).
+ *
+ * - Dot  (7 px)  : tracks the mouse exactly, white solid
+ * - Ring (38 px) : lags behind with lerp physics, WHITE FILLED + mix-blend-mode:difference
+ *                  → inverts colors beneath it — the "hole in text" effect
+ *
+ * On hover over interactive elements:
+ *   - Ring expands to 60 px and stays filled
+ *   - Dot scales to 0 (hidden)
+ */
 export default function CustomCursor() {
   const dotRef  = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
@@ -8,21 +19,23 @@ export default function CustomCursor() {
   const ring    = useRef({ x: -200, y: -200 });
 
   useEffect(() => {
-    // Only on desktop
+    // Touch devices: keep default cursor
     if (window.matchMedia('(pointer: coarse)').matches) return;
 
     document.documentElement.style.cursor = 'none';
 
+    // --- Mouse tracking ---
     const onMove = (e: MouseEvent) => {
       mouse.current = { x: e.clientX, y: e.clientY };
       gsap.set(dotRef.current, { x: e.clientX, y: e.clientY });
     };
 
-    // Lagging ring
+    // --- Lerp ring loop ---
     let raf: number;
+    const LERP = 0.10;
     const tick = () => {
-      ring.current.x += (mouse.current.x - ring.current.x) * 0.11;
-      ring.current.y += (mouse.current.y - ring.current.y) * 0.11;
+      ring.current.x += (mouse.current.x - ring.current.x) * LERP;
+      ring.current.y += (mouse.current.y - ring.current.y) * LERP;
       gsap.set(ringRef.current, { x: ring.current.x, y: ring.current.y });
       raf = requestAnimationFrame(tick);
     };
@@ -30,47 +43,66 @@ export default function CustomCursor() {
 
     window.addEventListener('mousemove', onMove, { passive: true });
 
-    // Expand ring over interactive elements
-    const grow = () => gsap.to(ringRef.current, {
-      scale: 2.2, borderColor: 'rgba(108,99,255,0.9)',
-      boxShadow: '0 0 14px rgba(108,99,255,0.5)', duration: 0.25,
-    });
-    const shrink = () => gsap.to(ringRef.current, {
-      scale: 1, borderColor: 'rgba(108,99,255,0.45)',
-      boxShadow: '0 0 8px rgba(108,99,255,0.15)', duration: 0.25,
-    });
+    // --- Hover states ---
+    const onEnter = () => {
+      gsap.to(ringRef.current,  { scale: 1.7, duration: 0.35, ease: 'power2.out' });
+      gsap.to(dotRef.current,   { scale: 0,   duration: 0.2,  ease: 'power2.out' });
+    };
+    const onLeave = () => {
+      gsap.to(ringRef.current,  { scale: 1,   duration: 0.4,  ease: 'elastic.out(1, 0.5)' });
+      gsap.to(dotRef.current,   { scale: 1,   duration: 0.25, ease: 'power2.out' });
+    };
 
-    const targets = document.querySelectorAll('a, button, [role="button"], input, select, textarea');
-    targets.forEach(el => {
-      el.addEventListener('mouseenter', grow);
-      el.addEventListener('mouseleave', shrink);
-    });
+    // Observe DOM mutations so new interactive elements are also registered
+    const register = () => {
+      document.querySelectorAll('a, button, [role="button"], input, select, textarea, label').forEach(el => {
+        el.removeEventListener('mouseenter', onEnter);
+        el.removeEventListener('mouseleave', onLeave);
+        el.addEventListener('mouseenter', onEnter);
+        el.addEventListener('mouseleave', onLeave);
+      });
+    };
+    register();
+
+    const observer = new MutationObserver(register);
+    observer.observe(document.body, { childList: true, subtree: true });
 
     return () => {
       document.documentElement.style.cursor = '';
       window.removeEventListener('mousemove', onMove);
       cancelAnimationFrame(raf);
-      targets.forEach(el => {
-        el.removeEventListener('mouseenter', grow);
-        el.removeEventListener('mouseleave', shrink);
+      observer.disconnect();
+      document.querySelectorAll('a, button, [role="button"], input, select, textarea, label').forEach(el => {
+        el.removeEventListener('mouseenter', onEnter);
+        el.removeEventListener('mouseleave', onLeave);
       });
     };
   }, []);
 
   return (
     <>
+      {/* Inner dot — exact mouse position */}
       <div
         ref={dotRef}
-        className="fixed top-0 left-0 pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 rounded-full"
-        style={{ width: 6, height: 6, background: 'white', boxShadow: '0 0 8px 2px rgba(108,99,255,0.7)' }}
+        className="fixed top-0 left-0 pointer-events-none z-[9999] rounded-full"
+        style={{
+          width: 7, height: 7,
+          background: 'white',
+          transform: 'translate(-50%, -50%)',
+          mixBlendMode: 'difference',
+        }}
       />
+
+      {/* Outer ring — lerp follow, FILLED white + mix-blend-mode:difference */}
       <div
         ref={ringRef}
-        className="fixed top-0 left-0 pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 rounded-full"
+        className="fixed top-0 left-0 pointer-events-none z-[9998] rounded-full"
         style={{
-          width: 30, height: 30,
-          border: '1px solid rgba(108,99,255,0.45)',
-          boxShadow: '0 0 8px rgba(108,99,255,0.15)',
+          width: 38, height: 38,
+          background: 'white',
+          transform: 'translate(-50%, -50%)',
+          mixBlendMode: 'difference',
+          opacity: 0.9,
         }}
       />
     </>
