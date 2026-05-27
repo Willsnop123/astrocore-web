@@ -1,11 +1,6 @@
-import { useId } from 'react';
-
 /**
- * AstroCore logo icon — bold "A" with an orbital ring.
- *
- * The ring passes BEHIND the A on the left side and
- * IN FRONT on the right side, giving a clean 3-D orbit effect.
- * Pure inline SVG — fully transparent background.
+ * AstroCore logo icon — Double-outlined A with a 4-pointed sparkle.
+ * Recreated from the user's Inkscape sketch.
  */
 interface Props {
   size?: number;
@@ -13,69 +8,42 @@ interface Props {
 }
 
 export default function AstroCoreIcon({ size = 48, className = '' }: Props) {
-  const raw = useId();
-  const uid = raw.replace(/:/g, '');
-
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 100 100"
+      viewBox="0 0 200 200"
       width={size}
       height={size}
       fill="none"
       className={className}
       aria-label="AstroCore"
     >
-      <defs>
-        {/* Clip left half  → ring drawn behind the A */}
-        <clipPath id={`lh-${uid}`}>
-          <rect x="0" y="0" width="51" height="100" />
-        </clipPath>
-
-        {/* Clip right half → ring drawn in front of the A */}
-        <clipPath id={`rh-${uid}`}>
-          <rect x="49" y="0" width="51" height="100" />
-        </clipPath>
-
-        {/* Subtle glow for the front arc */}
-        <filter id={`gw-${uid}`} x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="1.8" result="b" />
-          <feMerge>
-            <feMergeNode in="b" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-      </defs>
-
-      {/* ── Orbit ring — left arc (behind the A) ── */}
-      <ellipse
-        cx="50" cy="57"
-        rx="45" ry="10"
-        transform="rotate(-15, 50, 57)"
-        stroke="white" strokeWidth="3.8" fill="none"
-        clipPath={`url(#lh-${uid})`}
-        opacity="0.55"
+      {/* Outer A contour */}
+      <path
+        d="M 100 18 L 196 182 L 156 182 L 120 122 L 80 122 L 44 182 L 4 182 Z"
+        stroke="white"
+        strokeWidth="5"
+        strokeLinejoin="round"
+        strokeLinecap="round"
       />
-
-      {/* ══ The A ══ — three filled white shapes */}
-
-      {/* Left leg  */}
-      <polygon points="50,10  15,88  30,88" fill="white" />
-
-      {/* Right leg */}
-      <polygon points="50,10  70,88  85,88" fill="white" />
-
-      {/* Crossbar — spans both inner edges */}
-      <rect x="28" y="51" width="44" height="13" fill="white" />
-
-      {/* ── Orbit ring — right arc (in front of the A) ── */}
-      <ellipse
-        cx="50" cy="57"
-        rx="45" ry="10"
-        transform="rotate(-15, 50, 57)"
-        stroke="white" strokeWidth="3.8" fill="none"
-        clipPath={`url(#rh-${uid})`}
-        filter={`url(#gw-${uid})`}
+      {/* Inner A contour */}
+      <path
+        d="M 100 38 L 170 162 L 142 162 L 116 118 L 84 118 L 58 162 L 30 162 Z"
+        stroke="white"
+        strokeWidth="3"
+        strokeLinejoin="round"
+        strokeLinecap="round"
+        opacity={0.72}
+      />
+      {/* 4-pointed sparkle star — centered at (100, 87) inside the A */}
+      <path
+        d="M 100 50
+           C 100 78, 109 86, 118 87
+           C 109 88, 100 96, 100 124
+           C 100 96, 91 88, 82 87
+           C 91 86, 100 78, 100 50
+           Z"
+        fill="white"
       />
     </svg>
   );
