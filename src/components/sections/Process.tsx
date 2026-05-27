@@ -93,9 +93,9 @@ export default function Process() {
         <div className="absolute inset-0 bg-gradient-to-b from-space-bg via-space-bg-secondary to-space-bg pointer-events-none" />
         {/* Section atmosphere */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute rounded-full" style={{ width: 650, height: 650, top: '5%', left: '-18%', background: 'radial-gradient(circle, rgba(108,99,255,0.12) 0%, transparent 65%)' }} />
-          <div className="absolute rounded-full" style={{ width: 520, height: 520, bottom: '8%', right: '-12%', background: 'radial-gradient(circle, rgba(74,144,255,0.10) 0%, transparent 65%)' }} />
-          <div className="absolute rounded-full" style={{ width: 300, height: 300, top: '45%', left: '42%', background: 'radial-gradient(circle, rgba(56,232,176,0.05) 0%, transparent 65%)' }} />
+          <div className="absolute rounded-full" style={{ width: 480, height: 480, top: '-60px', left: '-80px', background: 'rgba(108,99,255,0.40)', filter: 'blur(110px)' }} />
+          <div className="absolute rounded-full" style={{ width: 420, height: 420, bottom: '-60px', right: '-70px', background: 'rgba(74,144,255,0.35)', filter: 'blur(100px)' }} />
+          <div className="absolute rounded-full" style={{ width: 260, height: 260, top: '50%', left: '45%', background: 'rgba(56,232,176,0.20)', filter: 'blur(80px)' }} />
         </div>
 
         <div className="relative max-w-5xl mx-auto">

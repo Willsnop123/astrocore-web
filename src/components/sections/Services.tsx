@@ -83,16 +83,18 @@ export default function Services() {
     >
       {/* Section atmosphere */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute rounded-full" style={{ width: 800, height: 800, top: '-20%', right: '-15%', background: 'radial-gradient(circle, rgba(108,99,255,0.13) 0%, transparent 65%)' }} />
-        <div className="absolute rounded-full" style={{ width: 550, height: 550, bottom: '-5%', left: '-10%', background: 'radial-gradient(circle, rgba(74,144,255,0.10) 0%, transparent 65%)' }} />
+        {/* Main light sources — blur-based for real depth */}
+        <div className="absolute rounded-full" style={{ width: 520, height: 520, top: '-80px', right: '-80px', background: 'rgba(108,99,255,0.45)', filter: 'blur(110px)' }} />
+        <div className="absolute rounded-full" style={{ width: 400, height: 400, bottom: '-60px', left: '-60px', background: 'rgba(74,144,255,0.35)', filter: 'blur(90px)' }} />
+        <div className="absolute rounded-full" style={{ width: 280, height: 280, top: '40%', left: '35%', background: 'rgba(108,99,255,0.18)', filter: 'blur(70px)' }} />
         {/* Orbit ring decorations top-right */}
-        <div className="absolute rounded-full" style={{ width: 480, height: 480, top: '-120px', right: '-120px', border: '1px solid rgba(108,99,255,0.09)' }} />
-        <div className="absolute rounded-full" style={{ width: 310, height: 310, top: '-60px', right: '-60px', border: '1px solid rgba(108,99,255,0.06)' }} />
+        <div className="absolute rounded-full" style={{ width: 480, height: 480, top: '-120px', right: '-120px', border: '1px solid rgba(108,99,255,0.12)' }} />
+        <div className="absolute rounded-full" style={{ width: 310, height: 310, top: '-60px', right: '-60px', border: '1px solid rgba(108,99,255,0.08)' }} />
         {/* HUD corner brackets */}
-        <div className="absolute top-8 left-8 w-8 h-8" style={{ borderLeft: '2px solid rgba(108,99,255,0.25)', borderTop: '2px solid rgba(108,99,255,0.25)' }} />
-        <div className="absolute top-8 right-8 w-8 h-8" style={{ borderRight: '2px solid rgba(108,99,255,0.25)', borderTop: '2px solid rgba(108,99,255,0.25)' }} />
-        <div className="absolute bottom-8 left-8 w-8 h-8" style={{ borderLeft: '2px solid rgba(108,99,255,0.25)', borderBottom: '2px solid rgba(108,99,255,0.25)' }} />
-        <div className="absolute bottom-8 right-8 w-8 h-8" style={{ borderRight: '2px solid rgba(108,99,255,0.25)', borderBottom: '2px solid rgba(108,99,255,0.25)' }} />
+        <div className="absolute top-8 left-8 w-8 h-8" style={{ borderLeft: '2px solid rgba(108,99,255,0.28)', borderTop: '2px solid rgba(108,99,255,0.28)' }} />
+        <div className="absolute top-8 right-8 w-8 h-8" style={{ borderRight: '2px solid rgba(108,99,255,0.28)', borderTop: '2px solid rgba(108,99,255,0.28)' }} />
+        <div className="absolute bottom-8 left-8 w-8 h-8" style={{ borderLeft: '2px solid rgba(108,99,255,0.28)', borderBottom: '2px solid rgba(108,99,255,0.28)' }} />
+        <div className="absolute bottom-8 right-8 w-8 h-8" style={{ borderRight: '2px solid rgba(108,99,255,0.28)', borderBottom: '2px solid rgba(108,99,255,0.28)' }} />
       </div>
 
       <div className="max-w-7xl mx-auto">

@@ -101,9 +101,10 @@ export default function Plans() {
     >
       {/* Section atmosphere */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute rounded-full" style={{ width: 900, height: 600, top: '15%', left: '50%', transform: 'translateX(-50%)', background: 'radial-gradient(circle, rgba(108,99,255,0.10) 0%, transparent 60%)' }} />
-        <div className="absolute rounded-full" style={{ width: 420, height: 420, top: '5%', left: '-8%', background: 'radial-gradient(circle, rgba(74,144,255,0.08) 0%, transparent 65%)' }} />
-        <div className="absolute rounded-full" style={{ width: 420, height: 420, bottom: '5%', right: '-8%', background: 'radial-gradient(circle, rgba(74,144,255,0.08) 0%, transparent 65%)' }} />
+        {/* Central glow — illuminates the featured card from below */}
+        <div className="absolute rounded-full" style={{ width: 700, height: 400, top: '30%', left: '50%', transform: 'translateX(-50%)', background: 'rgba(108,99,255,0.32)', filter: 'blur(130px)' }} />
+        <div className="absolute rounded-full" style={{ width: 350, height: 350, top: '-50px', left: '-60px', background: 'rgba(74,144,255,0.30)', filter: 'blur(90px)' }} />
+        <div className="absolute rounded-full" style={{ width: 350, height: 350, bottom: '-50px', right: '-60px', background: 'rgba(74,144,255,0.30)', filter: 'blur(90px)' }} />
       </div>
 
       <div className="max-w-7xl mx-auto">

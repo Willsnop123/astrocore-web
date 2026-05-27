@@ -21,7 +21,7 @@ export default function Hero() {
     gsap.set(letters, { opacity: 0, scale: 0, filter: 'blur(10px) brightness(3)' });
     gsap.to(letters, {
       opacity: 1, scale: 1, filter: 'blur(0px) brightness(1)',
-      duration: 1.5, stagger: 0.08, ease: 'expo.out', delay: 0.8,
+      duration: 1.2, stagger: 0.045, ease: 'expo.out', delay: 0.8,
     });
   }, []);
 
@@ -65,7 +65,8 @@ export default function Hero() {
   const scrollToServices = () =>
     document.querySelector('#servicios')?.scrollIntoView({ behavior: 'smooth' });
 
-  const titleLetters = 'ASTROCORE'.split('');
+  const titleLine1 = 'CREAMOS MUNDOS';
+  const titleLine2 = 'DIGITALES';
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-between px-6 overflow-hidden py-0">
@@ -95,17 +96,36 @@ export default function Hero() {
           </span>
         </div>
 
-        {/* Main title */}
+        {/* Main title — two lines */}
         <h1
           ref={titleRef}
-          className="font-display font-bold text-space-text mb-4 whitespace-nowrap"
-          style={{ perspective: '1000px', fontSize: 'clamp(2rem, 8.5vw, 7rem)', letterSpacing: 'clamp(0.04em, 0.5vw, 0.1em)' }}
+          className="font-display font-bold text-space-text mb-4 leading-tight"
+          style={{ perspective: '1000px', fontSize: 'clamp(1.9rem, 5.2vw, 4.6rem)', letterSpacing: 'clamp(0.04em, 0.4vw, 0.09em)' }}
         >
-          {titleLetters.map((letter, i) => (
-            <span key={i} className="letter inline-block" style={{ transformStyle: 'preserve-3d' }}>
-              {letter}
-            </span>
-          ))}
+          {/* Line 1 */}
+          <div className="block whitespace-nowrap">
+            {titleLine1.split('').map((letter, i) => (
+              <span
+                key={`a-${i}`}
+                className={letter === ' ' ? 'inline-block' : 'letter inline-block'}
+                style={{ transformStyle: 'preserve-3d', ...(letter === ' ' ? { minWidth: '0.3em' } : {}) }}
+              >
+                {letter === ' ' ? ' ' : letter}
+              </span>
+            ))}
+          </div>
+          {/* Line 2 — slightly larger for impact */}
+          <div className="block whitespace-nowrap" style={{ fontSize: '1.22em' }}>
+            {titleLine2.split('').map((letter, i) => (
+              <span
+                key={`b-${i}`}
+                className="letter inline-block"
+                style={{ transformStyle: 'preserve-3d' }}
+              >
+                {letter}
+              </span>
+            ))}
+          </div>
         </h1>
 
         {/* Subtitle — typewriter, under the title */}
