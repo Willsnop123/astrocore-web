@@ -118,19 +118,21 @@ const billFrag = /* glsl */`
 
     // Four concentric layers: white core → pink → violet → deep blue
     float tight  = exp(-d * d * 7.0);
+    float tgold  = exp(-d * d * 3.8) * 0.52;   // gold halo ring
     float medium = exp(-d * d * 2.2) * 0.65;
     float wide   = exp(-d * d * 0.65) * 0.32;
     float vwide  = exp(-d * d * 0.18) * 0.20;
 
     float pulse = 0.92 + 0.08 * sin(u_time * 0.65);
 
-    vec3 whiteCol  = vec3(1.00, 0.94, 0.97) * pulse;   // warm white-pink
+    vec3 whiteCol  = vec3(1.00, 0.96, 0.88) * pulse;   // warm white core
+    vec3 goldCol   = vec3(0.98, 0.78, 0.28);            // gold halo
     vec3 pinkCol   = vec3(1.00, 0.52, 0.80);            // hot pink
     vec3 violetCol = vec3(0.58, 0.18, 0.95);            // deep violet
     vec3 blueCol   = vec3(0.28, 0.14, 0.88);            // indigo-blue
 
-    vec3  col   = whiteCol * tight + pinkCol * medium + violetCol * wide + blueCol * vwide;
-    float alpha = (tight + medium * 0.65 + wide * 0.45 + vwide * 0.28) * pulse;
+    vec3  col   = whiteCol * tight + goldCol * tgold + pinkCol * medium + violetCol * wide + blueCol * vwide;
+    float alpha = (tight + tgold * 0.52 + medium * 0.65 + wide * 0.45 + vwide * 0.28) * pulse;
 
     gl_FragColor = vec4(col, alpha);
   }
@@ -196,7 +198,8 @@ function buildGalaxy() {
   const gSize   = new Float32Array(GAS);
 
   // ── Color palette — purple / pink / blue (matches reference) ──
-  const coreWhite = new THREE.Color('#fff5ff');   // near-white, hint of pink
+  const coreWhite = new THREE.Color('#fff8e8');   // warm white (slight gold tint)
+  const warmGold  = new THREE.Color('#ffc87a');   // gold — inner halo
   const innerPink = new THREE.Color('#ff79c6');   // hot pink (inner arms)
   const midViolet = new THREE.Color('#bd93f9');   // lavender/violet
   const indigo    = new THREE.Color('#6272a4');   // indigo-blue
@@ -238,10 +241,11 @@ function buildGalaxy() {
 
     const t = Math.min(r / RADIUS, 1);
     let c: THREE.Color;
-    if      (t < 0.08) c = coreWhite.clone().lerp(innerPink, t / 0.08);
-    else if (t < 0.32) c = innerPink.clone().lerp(midViolet, (t - 0.08) / 0.24);
-    else if (t < 0.62) c = midViolet.clone().lerp(indigo,    (t - 0.32) / 0.30);
-    else               c = indigo.clone().lerp(outerBlue,    (t - 0.62) / 0.38);
+    if      (t < 0.06) c = coreWhite.clone().lerp(warmGold,  t / 0.06);
+    else if (t < 0.18) c = warmGold.clone().lerp(innerPink,  (t - 0.06) / 0.12);
+    else if (t < 0.42) c = innerPink.clone().lerp(midViolet, (t - 0.18) / 0.24);
+    else if (t < 0.65) c = midViolet.clone().lerp(indigo,    (t - 0.42) / 0.23);
+    else               c = indigo.clone().lerp(outerBlue,    (t - 0.65) / 0.35);
 
     sCol[i*3] = c.r; sCol[i*3+1] = c.g; sCol[i*3+2] = c.b;
   }
@@ -267,7 +271,9 @@ function buildGalaxy() {
     sPos[i*3]  = px; sPos[i*3+1] = py; sPos[i*3+2] = pz;
 
     const t = r / 0.65;
-    const c = coreWhite.clone().lerp(innerPink, t * 0.55);
+    const c = t < 0.45
+      ? coreWhite.clone().lerp(warmGold,  t / 0.45)
+      : warmGold.clone().lerp(innerPink, (t - 0.45) / 0.55);
     sCol[i*3] = c.r; sCol[i*3+1] = c.g; sCol[i*3+2] = c.b;
   }
 
