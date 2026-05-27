@@ -109,13 +109,6 @@ export default function Technologies() {
       `}</style>
 
       <section ref={sectionRef} className="relative py-32 px-6 overflow-hidden">
-        {/* Section atmosphere */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {/* Large central glow — sits behind the orbit system */}
-          <div className="absolute rounded-full" style={{ width: 600, height: 600, top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'rgba(108,99,255,0.28)', filter: 'blur(140px)' }} />
-          <div className="absolute rounded-full" style={{ width: 380, height: 380, top: '-40px', left: '-60px', background: 'rgba(74,144,255,0.30)', filter: 'blur(100px)' }} />
-          <div className="absolute rounded-full" style={{ width: 340, height: 340, bottom: '-40px', right: '-50px', background: 'rgba(108,99,255,0.28)', filter: 'blur(90px)' }} />
-        </div>
 
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-20">

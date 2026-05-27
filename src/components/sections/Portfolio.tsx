@@ -215,12 +215,6 @@ export default function Portfolio() {
         @keyframes fadeInDevice { from { opacity: 0; } to { opacity: 1; } }
       `}</style>
 
-      {/* Section atmosphere */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute rounded-full" style={{ width: 450, height: 450, top: '-50px', left: '-70px', background: 'rgba(108,99,255,0.38)', filter: 'blur(110px)' }} />
-        <div className="absolute rounded-full" style={{ width: 400, height: 400, bottom: '-50px', right: '-60px', background: 'rgba(74,144,255,0.32)', filter: 'blur(100px)' }} />
-        <div className="absolute rounded-full" style={{ width: 300, height: 300, top: '30%', right: '20%', background: 'rgba(56,232,176,0.20)', filter: 'blur(80px)' }} />
-      </div>
 
       <div className="max-w-7xl mx-auto">
         {/* Title */}

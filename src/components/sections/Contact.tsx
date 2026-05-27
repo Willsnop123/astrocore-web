@@ -68,8 +68,6 @@ export default function Contact() {
     >
       {/* Section atmosphere */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute rounded-full" style={{ width: 500, height: 500, top: '-70px', left: '-80px', background: 'rgba(108,99,255,0.42)', filter: 'blur(120px)' }} />
-        <div className="absolute rounded-full" style={{ width: 440, height: 440, bottom: '-60px', right: '-70px', background: 'rgba(74,144,255,0.35)', filter: 'blur(110px)' }} />
         {/* HUD corner brackets */}
         <div className="absolute top-8 left-8 w-8 h-8" style={{ borderLeft: '2px solid rgba(108,99,255,0.28)', borderTop: '2px solid rgba(108,99,255,0.28)' }} />
         <div className="absolute top-8 right-8 w-8 h-8" style={{ borderRight: '2px solid rgba(108,99,255,0.28)', borderTop: '2px solid rgba(108,99,255,0.28)' }} />
