@@ -12,7 +12,6 @@ import CustomCursor from '@/components/effects/CustomCursor';
 import SupernovaEffect from '@/components/effects/SupernovaEffect';
 import WhatsAppButton from '@/components/ui/WhatsAppButton';
 import GrainOverlay from '@/components/effects/GrainOverlay';
-import MarqueeStrip from '@/components/effects/MarqueeStrip';
 import { useLenis } from '@/hooks/useLenis';
 
 const NebulaBackground = lazy(() => import('@/components/effects/NebulaBackground'));
@@ -47,18 +46,8 @@ export default function App() {
 
         <main>
           <Hero />
-          <MarqueeStrip
-            items={['DISEÑO WEB', 'DESARROLLO', 'SEO', 'E-COMMERCE', 'UI/UX', 'PERFORMANCE', 'LANZAMIENTO', 'OPTIMIZACION']}
-            speed={28}
-          />
           <Services />
           <Process />
-          <MarqueeStrip
-            items={['REACT', 'NEXT.JS', 'TYPESCRIPT', 'TAILWIND CSS', 'NODE.JS', 'WORDPRESS', 'SHOPIFY', 'FIGMA']}
-            speed={34}
-            reverse
-            dim
-          />
           <Plans />
           <Portfolio />
           <Technologies />
